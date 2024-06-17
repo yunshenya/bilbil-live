@@ -1,15 +1,14 @@
-use log::{debug, error, trace, warn};
 use crate::bil_log::init_log;
+use crate::comment::Comment;
 
 mod config;
 mod bil_log;
-
+mod like;
+mod utils;
+mod comment;
 
 #[tokio::main]
 async fn main() {
     init_log();
-    warn!("警告");
-    debug!("调试");
-    trace!("跟踪");
-    error!("大错误")
+    Comment.new().await;
 }
