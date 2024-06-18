@@ -33,13 +33,14 @@ struct Cookies{
     csrf:String
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Default)]
 pub struct Statistics{
     #[serde(rename="appId")]
     pub app_id:i32,
     pub platform:i32
 }
 
+#[derive(Default)]
 pub struct Config{
     pub cookies:String,
     pub room_id:i128,

@@ -19,16 +19,16 @@ impl Log for BilLog{
             let now = Local::now().format(fmt);
             match record.level() {
                 Error => {
-                    println!("{} {} {}", Red.paint(now.to_string()), Red.paint(record.level().as_str()), Red.paint(record.args().to_string()));
+                    println!("{} {} {}", Red.paint(now.to_string()), Red.paint("杂鱼"), Red.paint(record.args().to_string()));
                 }
                 Level::Warn => {
-                    println!("{} {} {}", Yellow.paint(now.to_string()), Yellow.paint(record.level().as_str()), Yellow.paint(record.args().to_string()));
+                    println!("{} {} {}", Yellow.paint(now.to_string()), Yellow.paint("笨蛋"), Yellow.paint(record.args().to_string()));
                 }
                 Info => {
-                    println!("{} {} {}", Purple.paint(now.to_string()), Blue.paint(record.level().as_str()), Green.paint(record.args().to_string()));
+                    println!("{} {} {}", Purple.paint(now.to_string()), Blue.paint("摸鱼"), Green.paint(record.args().to_string()));
                 }
                 Debug => {
-                    println!("{} {} {}", Blue.paint(now.to_string()), Yellow.paint(record.level().as_str()), Green.paint(record.args().to_string()));
+                    println!("{} {} {}", Blue.paint(now.to_string()), Yellow.paint("雌小鬼"), Green.paint(record.args().to_string()));
                 }
                 Level::Trace => {
                     println!("{} {} {}", now, record.level(),record.args());
@@ -46,15 +46,15 @@ pub fn init_log(){
         set_max_level(LevelFilter::Info)
     }) {
         Ok(_) => {
-            let banner = r#"
+            let banner = format!(r#"
         _         _    _         _          _
 ( )     _ (_ ) ( )     _ (_ )       (_ )  _
 | |_   (_) | | | |_   (_) | | ______ | | (_) _   _    __
 | '_`\ | | | | | '_`\ | | | |(______)| | | |( ) ( ) /'__`\
 | |_) )| | | | | |_) )| | | |        | | | || \_/ |(  ___/
 (_,__/'(_)(___)(_,__/'(_)(___)      (___)(_)`\___/'`\____)
-        作者: 云深不知处
-    "#;
+                    {}
+    "#, Yellow.paint("作者: 云深不知处"));
             let picture = Purple.paint(banner);
             println!("{}", picture);
             info!("日志初始化完成")

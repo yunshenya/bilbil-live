@@ -13,7 +13,7 @@ struct LikeResult{
 
 impl LikeSend{
     pub async fn new() -> bool{
-        let url = "https://api.live.bilibili.com/xlive/app-ucenter/v1/like_info_v3/like/likeReportV3";
+        let url = "https://api.live.bilibili.com/xlive/app-ucenter/v1/like_info_v3/like/likeReportV3".to_string();
         let utils = Utils::new(url).await;
         let config = Config::new().await;
         let form = Form::new()

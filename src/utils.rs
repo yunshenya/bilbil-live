@@ -4,14 +4,15 @@ use reqwest::multipart::Form;
 
 use crate::config::Config;
 
-pub struct Utils<'a>{
-    url:&'a str,
+#[derive(Default)]
+pub struct Utils{
+    url:String,
     headers:HeaderMap
 }
 
 
-impl <'a>Utils<'a>{
-    pub async fn new(url:&'a str) ->Self {
+impl Utils{
+    pub async fn new(url:String) ->Self {
         let cookies = Config::new().await;
         let mut headers = HeaderMap::new();
         headers.insert(USER_AGENT, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36".parse().unwrap());
@@ -26,7 +27,7 @@ impl <'a>Utils<'a>{
         let client = Client::builder()
             .default_headers(self.headers.clone())
             .build().unwrap();
-        client.post(self.url)
+        client.post(self.url.clone())
             .multipart(form)
             .send().await.unwrap()
     }
@@ -35,7 +36,7 @@ impl <'a>Utils<'a>{
         let client = Client::builder()
             .default_headers(self.headers.clone())
             .build().unwrap();
-        client.get(self.url)
+        client.get(self.url.clone())
             .query(&params)
             .send().await.unwrap()
     }
