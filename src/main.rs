@@ -6,6 +6,7 @@ use tokio::{join, task};
 use tokio::time::sleep;
 use crate::bil_log::init_log;
 use crate::comment::Comment;
+use crate::like::LikeSend;
 
 mod config;
 mod bil_log;
@@ -31,13 +32,15 @@ async fn main() {
 
     let task2 = task::spawn(async {
         loop{
+            sleep(Duration::from_secs(5)).await;
             let comment = Comment::new(&Comment::default()).await;
             let form2 = comment.build_form(None).await;
             comment.send(form2).await;
-            sleep(Duration::from_secs(5)).await;
+            LikeSend::new().await;
+
         }
     });
-    let (handle1, handle2) = join!(task2, task1);
+    let (handle1, handle2) = join!(task1, task2);
     (handle1.unwrap(), handle2.unwrap());
 
 }
