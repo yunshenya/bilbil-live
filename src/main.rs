@@ -1,22 +1,28 @@
 #![feature(duration_constructors)]
 
-use std::time::Duration;
-use log::info;
-use tokio::{join, task};
-use tokio::time::sleep;
 use crate::bil_log::init_log;
 use crate::comment::Comment;
 use crate::like::LikeSend;
+use crate::login::Login;
+use log::info;
+use std::time::Duration;
+use tokio::time::sleep;
+use tokio::{join, task};
 
-mod config;
+mod api;
 mod bil_log;
-mod like;
-mod utils;
 mod comment;
+mod config;
+mod like;
+mod login;
+mod utils;
+
+mod load_cookies;
 
 #[tokio::main]
 async fn main() {
     init_log();
+    Login.new().await;
     let task1 = task::spawn(async {
         loop {
             let comment = Comment::new(&Comment::default()).await;
@@ -31,16 +37,14 @@ async fn main() {
     });
 
     let task2 = task::spawn(async {
-        loop{
+        loop {
             sleep(Duration::from_secs(5)).await;
             let comment = Comment::new(&Comment::default()).await;
             let form2 = comment.build_form(None).await;
             comment.send(form2).await;
             LikeSend::new().await;
-
         }
     });
     let (handle1, handle2) = join!(task1, task2);
     (handle1.unwrap(), handle2.unwrap());
-
 }

@@ -1,14 +1,14 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize)]
-struct Loader{
-    room:RoomInfo,
-    userinfo:Cookies,
+struct Loader {
+    room: RoomInfo,
+    userinfo: Cookies,
 }
 
 #[derive(Deserialize)]
-struct RoomInfo{
-    room_id:i128,
+struct RoomInfo {
+    room_id: i128,
     anchor_id: i128,
     bubble: i32,
     msg: Vec<String>,
@@ -27,26 +27,26 @@ struct RoomInfo{
 }
 
 #[derive(Deserialize)]
-struct Cookies{
-    cookies:String,
-    uid:i128,
-    csrf:String
+struct Cookies {
+    cookies: String,
+    uid: i128,
+    csrf: String,
 }
 
 #[derive(Serialize, Deserialize, Default)]
-pub struct Statistics{
-    #[serde(rename="appId")]
-    pub app_id:i32,
-    pub platform:i32
+pub struct Statistics {
+    #[serde(rename = "appId")]
+    pub app_id: i32,
+    pub platform: i32,
 }
 
 #[derive(Default)]
-pub struct Config{
-    pub cookies:String,
-    pub room_id:i128,
-    pub uid:i128,
+pub struct Config {
+    pub cookies: String,
+    pub room_id: i128,
+    pub uid: i128,
     pub csrf: String,
-    pub anchor_id:i128,
+    pub anchor_id: i128,
     pub bubble: i32,
     pub msg: Vec<String>,
     pub color: i32,
@@ -63,24 +63,24 @@ pub struct Config{
     pub visit_id: Option<String>,
 }
 
-impl Config{
-    pub async fn new() -> Self{
+impl Config {
+    pub async fn new() -> Self {
         let yaml_str = include_str!("../config/config.yaml");
-        let loader:Loader = serde_yaml::from_str(yaml_str).unwrap();
-        Self{
+        let loader: Loader = serde_yaml::from_str(yaml_str).unwrap();
+        Self {
             room_id: loader.room.room_id,
-            anchor_id:loader.room.anchor_id,
-            bubble:loader.room.bubble,
+            anchor_id: loader.room.anchor_id,
+            bubble: loader.room.bubble,
             msg: loader.room.msg,
-            color:loader.room.color,
-            rnd:loader.room.rnd,
-            room_type:loader.room.room_type,
+            color: loader.room.color,
+            rnd: loader.room.rnd,
+            room_type: loader.room.room_type,
             jumpfrom: loader.room.jumpfrom,
-            reply_mid:loader.room.reply_mid,
+            reply_mid: loader.room.reply_mid,
             reply_attr: loader.room.reply_attr,
             replay_dmid: loader.room.replay_dmid,
             statistics: loader.room.statistics,
-            csrf:loader.userinfo.csrf,
+            csrf: loader.userinfo.csrf,
             click_time: loader.room.click_time,
             uid: loader.userinfo.uid,
             visit_id: loader.room.visit_id,
