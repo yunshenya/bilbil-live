@@ -1,0 +1,23 @@
+userinfo:
+  uid: 3493296238234445
+  csrf: d168c4d13ab67024c46cfe42210e0490
+  cookies: "buvid3=96D14CEE-2E46-E972-50CA-13CEC042214707856infoc; b_nut=1717576307; _uuid=26BACB49-105B8-10227-3DF1-1B1D2DB26BB108170infoc; buvid4=697EE6C2-38E7-3722-26DB-C6F3B3C3A60F08655-024060508-UGGO4A4eXwbExss3bmz215b%2F8InFX2Bf2RiZQlpQwTedsPILdlZwB9%2Bp%2FaPFI5R8; SESSDATA=a637d765%2C1733128398%2Cc179c%2A62CjB6KPHE1rBWB9C3SNqd9bpNmP1ht5KpiHFm_jEkH7BDiVDbPGCE26r8WAV9MC-o-ewSVi1fRkFLX3BWRWx0cXI1WER0QWp6UHZsU2NWS3QxQktFMHF2WVVnTExtNzdWUnR0azlCRzFpWEJxU2ltd1k5Mk5waDVIc21lREE5Z0w5bWV1SC02bVJBIIEC; bili_jct=d168c4d13ab67024c46cfe42210e0490; DedeUserID=3493296238234445; DedeUserID__ckMd5=4e7027a72f3e2708; enable_web_push=ENABLE; iflogin_when_web_push=1; header_theme_version=CLOSE; hit-dyn-v2=1; rpdid=0zbfvUxEI0|pZptbvZ3|1sl|3w1SeM5z; fingerprint=faff7e628de33146864415920be86172; buvid_fp_plain=undefined; CURRENT_BLACKGAP=0; bp_video_offset_3493296238234445=940600599545643030; CURRENT_QUALITY=120; LIVE_BUVID=AUTO9117181651382235; home_feed_column=5; browser_resolution=1536-730; CURRENT_FNVAL=4048; buvid_fp=5b07ac29060468a102b1e81089f7de11; PVID=1; bili_ticket=eyJhbGciOiJIUzI1NiIsImtpZCI6InMwMyIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTg2MzkxMTEsImlhdCI6MTcxODM3OTg1MSwicGx0IjotMX0.-7wbikIqbkijFc3qn_scEln7lVrfideVgoBttyJUf7w; bili_ticket_expires=1718639051; b_lsid=41BFDC210_1901A62FEEB; bsource=search_google; sid=6nce3mix"
+
+room:
+  anchor_id: 3546677285751385
+  room_id: 32687074
+  rnd: 1718634228
+  bubble: 0
+  msg: ["歡迎來到直播間~", "喜歡主播的點點關注，看看右下角歌單~", "喜歡主播的點點關注，看看右下角歌單~"]
+  color: 16777215
+  room_type: 0
+  jumpfrom: 71004
+  reply_mid: 0
+  reply_attr: 0
+  replay_dmid:
+  statistics: {"appId":100,"platform":5}
+  click_time: 1
+  visit_id:
+  mode: 1
+  fontsize: 25
+
