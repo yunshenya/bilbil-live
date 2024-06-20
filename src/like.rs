@@ -3,6 +3,7 @@ use crate::utils::Utils;
 use log::{info, warn};
 use reqwest::multipart::Form;
 use serde::Deserialize;
+use crate::api::SEND_LIKE_URL;
 
 pub struct LikeSend;
 
@@ -13,10 +14,7 @@ struct LikeResult {
 
 impl LikeSend {
     pub async fn new() -> bool {
-        let url =
-            "https://api.live.bilibili.com/xlive/app-ucenter/v1/like_info_v3/like/likeReportV3"
-                .to_string();
-        let utils = Utils::new(url).await;
+        let utils = Utils::new(SEND_LIKE_URL).await;
         let config = Config::new().await;
         let form = Form::new()
             .text("click_time", config.click_time.to_string())
