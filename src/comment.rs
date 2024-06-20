@@ -1,9 +1,9 @@
+use crate::api::COMMENT_SEND_URL;
 use log::{info, warn};
 use rand::prelude::IndexedRandom;
 use rand::thread_rng;
 use reqwest::multipart::Form;
 use serde::Deserialize;
-use crate::api::COMMENT_SEND_URL;
 
 use crate::config::Config;
 use crate::utils::Utils;

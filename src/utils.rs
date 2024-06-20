@@ -16,7 +16,10 @@ impl Utils {
         let mut headers = HeaderMap::new();
         headers.insert(USER_AGENT, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36".parse().unwrap());
         headers.insert(COOKIE, cookies.cookies.parse().unwrap());
-        Self { url:url.to_string(), headers }
+        Self {
+            url: url.to_string(),
+            headers,
+        }
     }
 
     pub async fn send_post(&self, form: Form) -> Response {

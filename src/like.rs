@@ -1,9 +1,9 @@
+use crate::api::SEND_LIKE_URL;
 use crate::config::Config;
 use crate::utils::Utils;
 use log::{info, warn};
 use reqwest::multipart::Form;
 use serde::Deserialize;
-use crate::api::SEND_LIKE_URL;
 
 pub struct LikeSend;
 
