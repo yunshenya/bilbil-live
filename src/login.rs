@@ -87,24 +87,14 @@ impl Login {
         loop {
             let params = [("qrcode_key", &qrcode.data.qrcode_key)];
             let is_scan = client.get(SCAN_INFO).query(&params).send().await.unwrap();
-            let (headers, text) = (is_scan.headers().clone(), is_scan.text().await.unwrap());
+            let (cookies, text) = (is_scan.cookies().map(|c| format!("{}={}", c.name(), c.value())).collect::<Vec<_>>().join("; "), is_scan.text().await.unwrap());
             let scan_info: CodeResult = serde_json::from_str(&*text).unwrap();
             match (scan_info.data.code as i32).into() {
                 Statue::Success => {
                     info!("{}", "登录成功");
-                    for (keys, value) in headers {
-                        match keys {
-                            None => {
-                                println!("{:?}", value);
-                            }
-                            Some(key) => {
-                                println!("{}", key);
-                            }
-                        }
-                    }
                     let config = CookiesConfig {
                         refresh_token: scan_info.data.refresh_token,
-                        cookies: scan_info.data.url,
+                        cookies,
                         is_login: true,
                     };
                     let config_str = serde_yaml::to_string(&config).unwrap();

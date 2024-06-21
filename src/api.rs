@@ -9,3 +9,4 @@ pub const COMMENT_SEND_URL: &str = "https://api.live.bilibili.com/msg/send";
 //发送直播点赞
 pub const SEND_LIKE_URL: &str =
     "https://api.live.bilibili.com/xlive/app-ucenter/v1/like_info_v3/like/likeReportV3";
+pub const ONE_MSG: &str = "https://api.cloudream.top/api/random_words";

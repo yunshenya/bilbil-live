@@ -1,8 +1,9 @@
-use crate::api::COMMENT_SEND_URL;
+use crate::api::{COMMENT_SEND_URL, ONE_MSG};
 use log::{info, warn};
 use rand::prelude::IndexedRandom;
 use rand::thread_rng;
 use reqwest::multipart::Form;
+use reqwest::Client;
 use serde::Deserialize;
 
 use crate::config::Config;
@@ -46,7 +47,11 @@ impl Comment {
             msg
         } else {
             let msg_list = self.config.msg.clone();
-            msg_list.choose(&mut thread_rng()).unwrap().clone()
+            let _ = msg_list.choose(&mut thread_rng()).unwrap().clone();
+            let string = self.get_msg().await;
+            self.decode_unicode(&*string)
+                .replace("\"", "")
+                .replace("]", "")
         };
         Form::new()
             .text("bubble", self.config.bubble.to_string())
@@ -85,5 +90,31 @@ impl Comment {
         } else {
             warn!("消息发送失败 {}", comment_data.message.unwrap())
         }
+    }
+
+    pub async fn get_msg(&self) -> String {
+        let client = Client::new();
+        let response = client
+            .get(ONE_MSG)
+            .send()
+            .await
+            .unwrap();
+        response.text().await.unwrap()
+    }
+
+    fn decode_unicode(&self, unicode_str: &str) -> String {
+        let mut decoded_str = String::new();
+        let parts: Vec<&str> = unicode_str.split("\\u").collect();
+        for part in parts.iter().skip(1) {
+            if let Ok(hex) = u16::from_str_radix(&part[0..4], 16) {
+                if let Some(ch) = char::from_u32(hex as u32) {
+                    decoded_str.push(ch);
+                }
+            }
+            if part.len() > 4 {
+                decoded_str.push_str(&part[4..]);
+            }
+        }
+        decoded_str
     }
 }
