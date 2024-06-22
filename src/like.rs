@@ -47,7 +47,7 @@ impl LikeSend {
             info!("已点赞");
             return true;
         } else {
-            warn!("点赞失败");
+            warn!("点赞失败: 错误码 {}", data_code.code);
             false
         }
     }

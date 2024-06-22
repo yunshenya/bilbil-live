@@ -38,13 +38,19 @@ async fn main() {
 
     let task2 = task::spawn(async {
         loop {
-            sleep(Duration::from_millis(5)).await;
+            sleep(Duration::from_millis(5000)).await;
             let comment = Comment::new(&Comment::default()).await;
             let form2 = comment.build_form(None).await;
             comment.send(form2).await;
+        }
+    });
+
+    let task3 = task::spawn(async {
+        loop {
+            sleep(Duration::from_millis(1000)).await;
             LikeSend::new().await;
         }
     });
-    let (handle1, handle2) = join!(task1, task2);
-    (handle1.unwrap(), handle2.unwrap());
+    let (handle1, handle2, handle3) = join!(task1, task2, task3);
+    (handle1.unwrap(), handle2.unwrap(), handle3.unwrap());
 }

@@ -1,7 +1,8 @@
-use crate::api::GET_LIVE_INFO;
+use crate::api::{COOKIES_PATH, GET_LIVE_INFO};
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
 use std::borrow::Cow;
+use std::fs::read_to_string;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 #[derive(Serialize, Deserialize)]
@@ -64,8 +65,8 @@ impl CookiesConfig {
 
 impl Default for CookiesConfig {
     fn default() -> Self {
-        let cookies_str = include_str!("../config/cookies.yaml");
-        let cookies: CookiesConfig = serde_yaml::from_str(cookies_str).unwrap();
+        let cookies_str = read_to_string(COOKIES_PATH).unwrap();
+        let cookies: CookiesConfig = serde_yaml::from_str(&*cookies_str).unwrap();
         Self {
             refresh_token: cookies.refresh_token,
             cookies: cookies.cookies,
