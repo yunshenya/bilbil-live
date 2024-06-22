@@ -1,5 +1,5 @@
 use std::fs::{create_dir_all, OpenOptions, read_to_string};
-use std::io::Write;
+use std::io::{stdin, stdout, Write};
 use std::path::Path;
 use log::info;
 
@@ -68,7 +68,6 @@ impl Config {
         }else {
             let dir = CONFIG_PATH.split("/").next().unwrap();
             create_dir_all(dir).unwrap();
-            info!("已创建配置文件");
             let loader = Loader::default();
             let serialized = serde_yaml::to_string(&loader).unwrap();
             let mut file = OpenOptions::new()
@@ -97,9 +96,15 @@ impl Config {
 
 impl Default for Loader {
     fn default() -> Self {
+        let mut room_id_str = String::new();
+        stdout().flush().unwrap();
+        print!("请输入直播房间号: ");
+        stdin().read_line(&mut room_id_str).unwrap();
+        let room_id = room_id_str.trim().parse::<u128>().unwrap();
+        info!("已创建配置文件");
         Self{
             room: RoomInfo {
-                room_id: 1774973507,
+                room_id,
                 msg: vec!["歡迎來到直播間~".to_string(), "喜歡主播的點點關注，看看右下角歌單~".to_string(), "喜歡主播的點點關注，看看右下角歌單~".to_string()],
                 color: 16777215,
                 mode: "1".to_string(),
