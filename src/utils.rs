@@ -1,7 +1,7 @@
-use reqwest::{Client, Response};
-use reqwest::header::{COOKIE, HeaderMap, USER_AGENT};
-use reqwest::multipart::Form;
 use crate::load_cookies::CookiesConfig;
+use reqwest::header::{HeaderMap, COOKIE, USER_AGENT};
+use reqwest::multipart::Form;
+use reqwest::{Client, Response};
 
 #[derive(Default)]
 pub struct Utils {

@@ -1,23 +1,12 @@
-userinfo:
-  uid: 3493296238234445
-
 room:
-  #主播uid
-  anchor_id: 15959813
   room_id: 13620691
-  #时间戳
-  rnd: 1718634228
-  bubble: 0
   msg: ["歡迎來到直播間~", "喜歡主播的點點關注，看看右下角歌單~", "喜歡主播的點點關注，看看右下角歌單~"]
   color: 16777215
   room_type: 0
   jumpfrom: 71004
-  reply_mid: 0
-  reply_attr: 0
   replay_dmid:
   statistics: {"appId":100,"platform":5}
   click_time: 1
   visit_id:
   mode: 1
-  fontsize: 25
 

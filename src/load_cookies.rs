@@ -1,29 +1,29 @@
-use std::borrow::Cow;
-use std::time::{SystemTime, UNIX_EPOCH};
+use crate::api::GET_LIVE_INFO;
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
-use crate::api::GET_LIVE_INFO;
+use std::borrow::Cow;
+use std::time::{SystemTime, UNIX_EPOCH};
 
-#[derive(Serialize,Deserialize)]
+#[derive(Serialize, Deserialize)]
 pub struct CookiesConfig {
     pub refresh_token: String,
     pub cookies: String,
     pub is_login: bool,
-    pub uid:u128
+    pub uid: u128,
 }
 
 #[derive(Serialize, Deserialize)]
-struct RoomInfo{
-    data:RoomInfoData
+pub struct RoomInfo {
+    pub data: RoomInfoData,
 }
 
 #[derive(Deserialize, Serialize)]
-struct RoomInfoData{
-    uid:u128,
-    room_id:u128
+pub struct RoomInfoData {
+    pub uid: u128,
+    pub room_id: u128,
 }
 
-impl CookiesConfig{
+impl CookiesConfig {
     pub fn csrf() -> Cow<'static, str> {
         let config = CookiesConfig::default();
         for str in config.cookies.split("; ") {
@@ -39,19 +39,24 @@ impl CookiesConfig{
         Cow::Owned(String::new())
     }
 
-    pub async fn anchor_id(room_id:u128) -> u128{
+    pub async fn anchor_id(room_id: u128) -> RoomInfo {
         let client = Client::new();
-        let params = [("room_id",room_id)];
-        let room_info_resp= client.get(GET_LIVE_INFO)
+        let params = [("room_id", room_id)];
+        let room_info_resp = client
+            .get(GET_LIVE_INFO)
             .query(&params)
-            .send().await.unwrap();
-        let room_info:RoomInfo = serde_json::from_str(&*room_info_resp.text().await.unwrap()).unwrap();
-        return room_info.data.uid;
+            .send()
+            .await
+            .unwrap();
+        let room_info: RoomInfo =
+            serde_json::from_str(&*room_info_resp.text().await.unwrap()).unwrap();
+        return room_info;
     }
 
-    pub fn rnd() -> u64{
+    pub fn rnd() -> u64 {
         let current_time = SystemTime::now();
-        let since_epoch = current_time.duration_since(UNIX_EPOCH)
+        let since_epoch = current_time
+            .duration_since(UNIX_EPOCH)
             .expect("Time went backwards");
         since_epoch.as_secs()
     }

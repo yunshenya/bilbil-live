@@ -43,15 +43,15 @@ struct QrData {
 }
 
 #[derive(Deserialize, Serialize)]
-struct AccountData{
-    mid:u128,
-    uname:String,
-    sign:String
+struct AccountData {
+    mid: u128,
+    uname: String,
+    sign: String,
 }
 
 #[derive(Serialize, Deserialize)]
-struct Account{
-    data:AccountData
+struct Account {
+    data: AccountData,
 }
 #[derive(Serialize, Deserialize)]
 struct Qrcode {
@@ -123,15 +123,19 @@ impl Login {
                         .collect::<Vec<_>>()
                         .join("; ");
                     let cookies = format!("{}; {}", cookies_str, cookie);
-                    let account_resp = client.get(GET_ACCOUNT)
+                    let account_resp = client
+                        .get(GET_ACCOUNT)
                         .header(COOKIE, &cookies)
-                        .send().await.unwrap();
-                    let account: Account = serde_json::from_str(&*account_resp.text().await.unwrap()).unwrap();
+                        .send()
+                        .await
+                        .unwrap();
+                    let account: Account =
+                        serde_json::from_str(&*account_resp.text().await.unwrap()).unwrap();
                     let config = CookiesConfig {
                         refresh_token: scan_info.data.refresh_token,
                         cookies,
                         is_login: true,
-                        uid:account.data.mid
+                        uid: account.data.mid,
                     };
                     let config_str = serde_yaml::to_string(&config).unwrap();
                     let mut file = OpenOptions::new()

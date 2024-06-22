@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize)]
 struct Loader {
-    room: RoomInfo
+    room: RoomInfo,
 }
 
 #[derive(Deserialize)]
