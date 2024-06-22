@@ -2,8 +2,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize)]
 struct Loader {
-    room: RoomInfo,
-    userinfo: Cookies,
+    room: RoomInfo
 }
 
 #[derive(Deserialize)]
@@ -26,11 +25,6 @@ struct RoomInfo {
     visit_id: Option<String>,
 }
 
-#[derive(Deserialize)]
-struct Cookies {
-    uid: i128,
-}
-
 #[derive(Serialize, Deserialize, Default)]
 pub struct Statistics {
     #[serde(rename = "appId")]
@@ -41,7 +35,6 @@ pub struct Statistics {
 #[derive(Default)]
 pub struct Config {
     pub room_id: i128,
-    pub uid: i128,
     pub anchor_id: i128,
     pub bubble: i32,
     pub msg: Vec<String>,
@@ -77,7 +70,6 @@ impl Config {
             replay_dmid: loader.room.replay_dmid,
             statistics: loader.room.statistics,
             click_time: loader.room.click_time,
-            uid: loader.userinfo.uid,
             visit_id: loader.room.visit_id,
             mode: loader.room.mode,
             fontsize: loader.room.fontsize,

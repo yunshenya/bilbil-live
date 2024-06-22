@@ -17,10 +17,11 @@ impl LikeSend {
     pub async fn new() -> bool {
         let utils = Utils::new(SEND_LIKE_URL).await;
         let config = Config::new().await;
+        let load_config = CookiesConfig::default();
         let form = Form::new()
             .text("click_time", config.click_time.to_string())
             .text("room_id", config.room_id.to_string())
-            .text("uid", config.uid.to_string())
+            .text("uid", load_config.uid.to_string())
             .text("anchor_id", config.anchor_id.to_string())
             .text("csrf_token", CookiesConfig::csrf())
             .text("csrf", CookiesConfig::csrf())
