@@ -10,3 +10,5 @@ pub const COMMENT_SEND_URL: &str = "https://api.live.bilibili.com/msg/send";
 pub const SEND_LIKE_URL: &str =
     "https://api.live.bilibili.com/xlive/app-ucenter/v1/like_info_v3/like/likeReportV3";
 pub const ONE_MSG: &str = "https://api.cloudream.top/api/random_words";
+//获取个人信息
+pub const GET_ACCOUNT: &str = "https://api.bilibili.com/x/member/web/account";

@@ -1,12 +1,12 @@
 use std::borrow::Cow;
-
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize,Deserialize)]
 pub struct CookiesConfig {
     pub refresh_token: String,
     pub cookies: String,
     pub is_login: bool,
+    pub uid:u128
 }
 
 
@@ -34,7 +34,8 @@ impl Default for CookiesConfig {
         Self {
             refresh_token: cookies.refresh_token,
             cookies: cookies.cookies,
-            is_login: cookies.is_login
+            is_login: cookies.is_login,
+            uid: cookies.uid,
         }
     }
 }

@@ -1,4 +1,4 @@
-use crate::api::{FILE_PATH, GET_CODE_URL, SCAN_INFO};
+use crate::api::{FILE_PATH, GET_ACCOUNT, GET_CODE_URL, SCAN_INFO};
 use crate::load_cookies::CookiesConfig;
 use log::{info, warn};
 use qrcode::render::unicode;
@@ -42,6 +42,17 @@ struct QrData {
     qrcode_key: String,
 }
 
+#[derive(Deserialize, Serialize)]
+struct AccountData{
+    mid:u128,
+    uname:String,
+    sign:String
+}
+
+#[derive(Serialize, Deserialize)]
+struct Account{
+    data:AccountData
+}
 #[derive(Serialize, Deserialize)]
 struct Qrcode {
     data: QrData,
@@ -112,10 +123,15 @@ impl Login {
                         .collect::<Vec<_>>()
                         .join("; ");
                     let cookies = format!("{}; {}", cookies_str, cookie);
+                    let account_resp = client.get(GET_ACCOUNT)
+                        .header(COOKIE, &cookies)
+                        .send().await.unwrap();
+                    let account: Account = serde_json::from_str(&*account_resp.text().await.unwrap()).unwrap();
                     let config = CookiesConfig {
                         refresh_token: scan_info.data.refresh_token,
                         cookies,
                         is_login: true,
+                        uid:account.data.mid
                     };
                     let config_str = serde_yaml::to_string(&config).unwrap();
                     let mut file = OpenOptions::new()
@@ -125,6 +141,7 @@ impl Login {
                         .open(FILE_PATH)
                         .unwrap();
                     file.write_all(config_str.as_bytes()).unwrap();
+                    info!("用户名: {} 签名: {}", account.data.uname, account.data.sign);
                     info!("登录信息保存成功");
                     break;
                 }
