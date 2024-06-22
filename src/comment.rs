@@ -55,10 +55,10 @@ impl Comment {
                 .replace("]", "")
         };
         Form::new()
-            .text("bubble", self.config.bubble.to_string())
+            .text("bubble", "0")
             .text("color", self.config.color.to_string())
             .text("msg", msg)
-            .text("fontsize", self.config.fontsize.to_string())
+            .text("fontsize", "25")
             .text("jumpfrom", self.config.jumpfrom.to_string())
             .text(
                 "replay_dmid",
@@ -75,11 +75,11 @@ impl Comment {
                 serde_json::to_string(&self.config.statistics).unwrap(),
             )
             .text("mode", self.config.mode.clone())
-            .text("reply_attr", self.config.reply_attr.to_string())
-            .text("rnd", self.config.rnd.to_string())
+            .text("reply_attr", "0")
+            .text("rnd", CookiesConfig::rnd().to_string())
             .text("room_type", self.config.room_type.to_string())
             .text("roomid", self.config.room_id.to_string())
-            .text("reply_mid", self.config.reply_mid.to_string())
+            .text("reply_mid", "0")
     }
 
     pub async fn send(&self, form: Form) {

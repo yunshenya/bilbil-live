@@ -1,5 +1,8 @@
 use std::borrow::Cow;
+use std::time::{SystemTime, UNIX_EPOCH};
+use reqwest::Client;
 use serde::{Deserialize, Serialize};
+use crate::api::GET_LIVE_INFO;
 
 #[derive(Serialize,Deserialize)]
 pub struct CookiesConfig {
@@ -9,6 +12,16 @@ pub struct CookiesConfig {
     pub uid:u128
 }
 
+#[derive(Serialize, Deserialize)]
+struct RoomInfo{
+    data:RoomInfoData
+}
+
+#[derive(Deserialize, Serialize)]
+struct RoomInfoData{
+    uid:u128,
+    room_id:u128
+}
 
 impl CookiesConfig{
     pub fn csrf() -> Cow<'static, str> {
@@ -24,6 +37,23 @@ impl CookiesConfig{
         }
         // 如果找不到bili_jct，则返回一个空字符串，这里使用了Cow的Owned变体
         Cow::Owned(String::new())
+    }
+
+    pub async fn anchor_id(room_id:u128) -> u128{
+        let client = Client::new();
+        let params = [("room_id",room_id)];
+        let room_info_resp= client.get(GET_LIVE_INFO)
+            .query(&params)
+            .send().await.unwrap();
+        let room_info:RoomInfo = serde_json::from_str(&*room_info_resp.text().await.unwrap()).unwrap();
+        return room_info.data.uid;
+    }
+
+    pub fn rnd() -> u64{
+        let current_time = SystemTime::now();
+        let since_epoch = current_time.duration_since(UNIX_EPOCH)
+            .expect("Time went backwards");
+        since_epoch.as_secs()
     }
 }
 

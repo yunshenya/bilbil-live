@@ -12,3 +12,5 @@ pub const SEND_LIKE_URL: &str =
 pub const ONE_MSG: &str = "https://api.cloudream.top/api/random_words";
 //获取个人信息
 pub const GET_ACCOUNT: &str = "https://api.bilibili.com/x/member/web/account";
+//获取直播间信息
+pub const GET_LIVE_INFO: &str = "https://api.live.bilibili.com/room/v1/Room/get_info";

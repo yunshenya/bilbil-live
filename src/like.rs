@@ -22,7 +22,7 @@ impl LikeSend {
             .text("click_time", config.click_time.to_string())
             .text("room_id", config.room_id.to_string())
             .text("uid", load_config.uid.to_string())
-            .text("anchor_id", config.anchor_id.to_string())
+            .text("anchor_id", CookiesConfig::anchor_id(config.room_id).await.to_string())
             .text("csrf_token", CookiesConfig::csrf())
             .text("csrf", CookiesConfig::csrf())
             .text(
