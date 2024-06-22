@@ -3,13 +3,13 @@ use crate::load_cookies::CookiesConfig;
 use log::{info, warn};
 use qrcode::render::unicode;
 use qrcode::QrCode;
+use reqwest::header::COOKIE;
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
 use std::fs::{create_dir_all, OpenOptions};
 use std::io::Write;
 use std::path::Path;
 use std::time::Duration;
-use reqwest::header::COOKIE;
 use tokio::time::sleep;
 
 pub struct Login;
@@ -100,12 +100,17 @@ impl Login {
             match (scan_info.data.code as i32).into() {
                 Statue::Success => {
                     info!("{}", "登录成功");
-                    let resp = client.get(scan_info.data.url)
+                    let resp = client
+                        .get(scan_info.data.url)
                         .header(COOKIE, cookie.clone())
-                        .send().await.unwrap();
-                    let cookies_str = resp.cookies().map(|x|{
-                        format!("{}={}", x.name(), x.value())
-                    }).collect::<Vec<_>>().join("; ");
+                        .send()
+                        .await
+                        .unwrap();
+                    let cookies_str = resp
+                        .cookies()
+                        .map(|x| format!("{}={}", x.name(), x.value()))
+                        .collect::<Vec<_>>()
+                        .join("; ");
                     let cookies = format!("{}; {}", cookies_str, cookie);
                     let config = CookiesConfig {
                         refresh_token: scan_info.data.refresh_token,
@@ -126,8 +131,7 @@ impl Login {
                 Statue::Expired => {
                     warn!("{}", scan_info.data.message);
                     info!("请重新扫描二维码");
-                    let future = Box::pin(self.qrcode()); // 对递归调用进行盒装箱
-                    future.await; // 等待未来完成
+                    Box::pin(self.qrcode()).await; // 对递归调用进行盒装箱
                 }
                 Statue::NotConfirmed => {
                     if is_confirmed_first {

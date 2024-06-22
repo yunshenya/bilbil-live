@@ -4,6 +4,7 @@ use crate::utils::Utils;
 use log::{info, warn};
 use reqwest::multipart::Form;
 use serde::Deserialize;
+use crate::load_cookies::CookiesConfig;
 
 pub struct LikeSend;
 
@@ -21,8 +22,8 @@ impl LikeSend {
             .text("room_id", config.room_id.to_string())
             .text("uid", config.uid.to_string())
             .text("anchor_id", config.anchor_id.to_string())
-            .text("csrf_token", config.csrf.clone())
-            .text("csrf", config.csrf)
+            .text("csrf_token", CookiesConfig::csrf())
+            .text("csrf", CookiesConfig::csrf())
             .text(
                 "visit_id",
                 if let Some(visit_id) = config.visit_id {

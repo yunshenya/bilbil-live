@@ -28,9 +28,7 @@ struct RoomInfo {
 
 #[derive(Deserialize)]
 struct Cookies {
-    cookies: String,
     uid: i128,
-    csrf: String,
 }
 
 #[derive(Serialize, Deserialize, Default)]
@@ -42,10 +40,8 @@ pub struct Statistics {
 
 #[derive(Default)]
 pub struct Config {
-    pub cookies: String,
     pub room_id: i128,
     pub uid: i128,
-    pub csrf: String,
     pub anchor_id: i128,
     pub bubble: i32,
     pub msg: Vec<String>,
@@ -80,13 +76,11 @@ impl Config {
             reply_attr: loader.room.reply_attr,
             replay_dmid: loader.room.replay_dmid,
             statistics: loader.room.statistics,
-            csrf: loader.userinfo.csrf,
             click_time: loader.room.click_time,
             uid: loader.userinfo.uid,
             visit_id: loader.room.visit_id,
             mode: loader.room.mode,
             fontsize: loader.room.fontsize,
-            cookies: loader.userinfo.cookies,
         }
     }
 }

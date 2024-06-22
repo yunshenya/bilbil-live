@@ -7,6 +7,7 @@ use reqwest::Client;
 use serde::Deserialize;
 
 use crate::config::Config;
+use crate::load_cookies::CookiesConfig;
 use crate::utils::Utils;
 
 #[derive(Default)]
@@ -67,8 +68,8 @@ impl Comment {
                     String::new()
                 },
             )
-            .text("csrf", self.config.csrf.clone())
-            .text("csrf_token", self.config.csrf.clone())
+            .text("csrf", CookiesConfig::csrf())
+            .text("csrf_token", CookiesConfig::csrf())
             .text(
                 "statistics",
                 serde_json::to_string(&self.config.statistics).unwrap(),

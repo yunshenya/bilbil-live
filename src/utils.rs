@@ -1,8 +1,7 @@
 use reqwest::{Client, Response};
 use reqwest::header::{COOKIE, HeaderMap, USER_AGENT};
 use reqwest::multipart::Form;
-
-use crate::config::Config;
+use crate::load_cookies::CookiesConfig;
 
 #[derive(Default)]
 pub struct Utils {
@@ -12,11 +11,10 @@ pub struct Utils {
 
 impl Utils {
     pub async fn new(url: &str) -> Self {
-        let cookies = Config::new().await;
-        // let load_cookies = CookiesConfig::default();
+        let load_cookies = CookiesConfig::default();
         let mut headers = HeaderMap::new();
         headers.insert(USER_AGENT, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36".parse().unwrap());
-        headers.insert(COOKIE, cookies.cookies.parse().unwrap());
+        headers.insert(COOKIE, load_cookies.cookies.parse().unwrap());
         Self {
             url: url.to_string(),
             headers,
