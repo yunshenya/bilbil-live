@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 pub struct CookiesConfig {
     pub refresh_token: String,
     pub cookies: String,
-    pub is_login: bool,
+    pub is_login: bool
 }
 
 impl Default for CookiesConfig {
@@ -14,7 +14,7 @@ impl Default for CookiesConfig {
         Self {
             refresh_token: cookies.refresh_token,
             cookies: cookies.cookies,
-            is_login: cookies.is_login,
+            is_login: cookies.is_login
         }
     }
 }

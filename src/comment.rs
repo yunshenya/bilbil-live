@@ -94,11 +94,7 @@ impl Comment {
 
     pub async fn get_msg(&self) -> String {
         let client = Client::new();
-        let response = client
-            .get(ONE_MSG)
-            .send()
-            .await
-            .unwrap();
+        let response = client.get(ONE_MSG).send().await.unwrap();
         response.text().await.unwrap()
     }
 

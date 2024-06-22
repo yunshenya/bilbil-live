@@ -9,6 +9,7 @@ use std::fs::{create_dir_all, OpenOptions};
 use std::io::Write;
 use std::path::Path;
 use std::time::Duration;
+use reqwest::header::COOKIE;
 use tokio::time::sleep;
 
 pub struct Login;
@@ -87,11 +88,25 @@ impl Login {
         loop {
             let params = [("qrcode_key", &qrcode.data.qrcode_key)];
             let is_scan = client.get(SCAN_INFO).query(&params).send().await.unwrap();
-            let (cookies, text) = (is_scan.cookies().map(|c| format!("{}={}", c.name(), c.value())).collect::<Vec<_>>().join("; "), is_scan.text().await.unwrap());
+            let (cookie, text) = (
+                is_scan
+                    .cookies()
+                    .map(|c| format!("{}={}", c.name(), c.value()))
+                    .collect::<Vec<_>>()
+                    .join("; "),
+                is_scan.text().await.unwrap(),
+            );
             let scan_info: CodeResult = serde_json::from_str(&*text).unwrap();
             match (scan_info.data.code as i32).into() {
                 Statue::Success => {
                     info!("{}", "登录成功");
+                    let resp = client.get(scan_info.data.url)
+                        .header(COOKIE, cookie.clone())
+                        .send().await.unwrap();
+                    let cookies_str = resp.cookies().map(|x|{
+                        format!("{}={}", x.name(), x.value())
+                    }).collect::<Vec<_>>().join("; ");
+                    let cookies = format!("{}; {}", cookies_str, cookie);
                     let config = CookiesConfig {
                         refresh_token: scan_info.data.refresh_token,
                         cookies,
