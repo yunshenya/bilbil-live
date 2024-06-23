@@ -100,7 +100,14 @@ impl Default for Loader {
         stdout().flush().unwrap();
         print!("请输入直播房间号: ");
         stdin().read_line(&mut room_id_str).unwrap();
-        let room_id = room_id_str.trim().parse::<u128>().unwrap();
+        let room_id = match room_id_str.trim().parse::<u128>() {
+            Ok(room_id) => {
+                room_id
+            }
+            Err(_) => {
+                30513598
+            }
+        };
         info!("已创建配置文件");
         Self{
             room: RoomInfo {
