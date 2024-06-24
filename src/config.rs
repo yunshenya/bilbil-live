@@ -1,4 +1,4 @@
-use std::fs::{create_dir_all, OpenOptions, read_to_string};
+use std::fs::{OpenOptions, read_to_string};
 use std::io::{stdin, stdout, Write};
 use std::path::Path;
 use log::info;

@@ -29,7 +29,7 @@ async fn main() {
             let form = comment.build_form(Option::from(String::from("修炼"))).await;
             comment.send(form).await;
             info!("主人修炼发送成功了( •̀ ω •́ )y");
-            sleep(Duration::from_mins(5)).await;
+            sleep(Duration::from_mins(10)).await;
             let form1 = comment.build_form(Option::from(String::from("突破"))).await;
             comment.send(form1).await;
             info!("主人突破发送成功了( •̀ ω •́ )y")
