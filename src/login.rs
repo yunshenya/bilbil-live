@@ -1,6 +1,6 @@
 use crate::api::{COOKIES_PATH, GET_ACCOUNT, GET_CODE_URL, SCAN_INFO};
 use crate::load_cookies::CookiesConfig;
-use log::{info, warn};
+use log::{error, info, warn};
 use qrcode::render::unicode;
 use qrcode::QrCode;
 use reqwest::header::COOKIE;
@@ -9,6 +9,7 @@ use serde::{Deserialize, Serialize};
 use std::fs::{create_dir_all, OpenOptions};
 use std::io::Write;
 use std::path::Path;
+use std::process::exit;
 use std::time::Duration;
 use tokio::time::sleep;
 
@@ -89,87 +90,94 @@ impl Login {
 
     async fn qrcode(&self) {
         let client = Client::new();
-        let qr_response = client.get(GET_CODE_URL).send().await.unwrap();
-        let qrcode: Qrcode = serde_json::from_str(&*qr_response.text().await.unwrap()).unwrap();
-        let code = QrCode::new(&qrcode.data.url).unwrap();
-        info!("正在使用二维码登录，已生成二维码");
-        println!("{}", code.render::<unicode::Dense1x2>().build());
-        let mut is_first = true;
-        let mut is_confirmed_first = true;
-        loop {
-            let params = [("qrcode_key", &qrcode.data.qrcode_key)];
-            let is_scan = client.get(SCAN_INFO).query(&params).send().await.unwrap();
-            let (cookie, text) = (
-                is_scan
-                    .cookies()
-                    .map(|c| format!("{}={}", c.name(), c.value()))
-                    .collect::<Vec<_>>()
-                    .join("; "),
-                is_scan.text().await.unwrap(),
-            );
-            let scan_info: CodeResult = serde_json::from_str(&*text).unwrap();
-            match (scan_info.data.code as i32).into() {
-                Statue::Success => {
-                    info!("{}", "登录成功");
-                    let resp = client
-                        .get(scan_info.data.url)
-                        .header(COOKIE, cookie.clone())
-                        .send()
-                        .await
-                        .unwrap();
-                    let cookies_str = resp
-                        .cookies()
-                        .map(|x| format!("{}={}", x.name(), x.value()))
-                        .collect::<Vec<_>>()
-                        .join("; ");
-                    let cookies = format!("{}; {}", cookies_str, cookie);
-                    let account_resp = client
-                        .get(GET_ACCOUNT)
-                        .header(COOKIE, &cookies)
-                        .send()
-                        .await
-                        .unwrap();
-                    let account: Account =
-                        serde_json::from_str(&*account_resp.text().await.unwrap()).unwrap();
-                    let config = CookiesConfig {
-                        refresh_token: scan_info.data.refresh_token,
-                        cookies,
-                        is_login: true,
-                        uid: account.data.mid,
-                    };
-                    let config_str = serde_yaml::to_string(&config).unwrap();
-                    let mut file = OpenOptions::new()
-                        .create(true)
-                        .write(true)
-                        .truncate(true)
-                        .open(COOKIES_PATH)
-                        .unwrap();
-                    file.write_all(config_str.as_bytes()).unwrap();
-                    info!("用户名: {} 签名: {}", account.data.uname, account.data.sign);
-                    info!("登录信息保存成功");
-                    break;
-                }
-                Statue::Expired => {
-                    warn!("{}", scan_info.data.message);
-                    info!("请重新扫描二维码");
-                    Box::pin(self.qrcode()).await; // 对递归调用进行盒装箱
-                }
-                Statue::NotConfirmed => {
-                    if is_confirmed_first {
-                        info!("请在手机端确认登录");
-                        is_confirmed_first = false
+        match client.get(GET_CODE_URL).send().await {
+            Ok(qr_response) => {
+                let qrcode: Qrcode = serde_json::from_str(&*qr_response.text().await.unwrap()).unwrap();
+                let code = QrCode::new(&qrcode.data.url).unwrap();
+                info!("正在使用二维码登录，已生成二维码");
+                println!("{}", code.render::<unicode::Dense1x2>().build());
+                let mut is_first = true;
+                let mut is_confirmed_first = true;
+                loop {
+                    let params = [("qrcode_key", &qrcode.data.qrcode_key)];
+                    let is_scan = client.get(SCAN_INFO).query(&params).send().await.unwrap();
+                    let (cookie, text) = (
+                        is_scan
+                            .cookies()
+                            .map(|c| format!("{}={}", c.name(), c.value()))
+                            .collect::<Vec<_>>()
+                            .join("; "),
+                        is_scan.text().await.unwrap(),
+                    );
+                    let scan_info: CodeResult = serde_json::from_str(&*text).unwrap();
+                    match (scan_info.data.code as i32).into() {
+                        Statue::Success => {
+                            info!("{}", "登录成功");
+                            let resp = client
+                                .get(scan_info.data.url)
+                                .header(COOKIE, cookie.clone())
+                                .send()
+                                .await
+                                .unwrap();
+                            let cookies_str = resp
+                                .cookies()
+                                .map(|x| format!("{}={}", x.name(), x.value()))
+                                .collect::<Vec<_>>()
+                                .join("; ");
+                            let cookies = format!("{}; {}", cookies_str, cookie);
+                            let account_resp = client
+                                .get(GET_ACCOUNT)
+                                .header(COOKIE, &cookies)
+                                .send()
+                                .await
+                                .unwrap();
+                            let account: Account =
+                                serde_json::from_str(&*account_resp.text().await.unwrap()).unwrap();
+                            let config = CookiesConfig {
+                                refresh_token: scan_info.data.refresh_token,
+                                cookies,
+                                is_login: true,
+                                uid: account.data.mid,
+                            };
+                            let config_str = serde_yaml::to_string(&config).unwrap();
+                            let mut file = OpenOptions::new()
+                                .create(true)
+                                .write(true)
+                                .truncate(true)
+                                .open(COOKIES_PATH)
+                                .unwrap();
+                            file.write_all(config_str.as_bytes()).unwrap();
+                            info!("用户名: {} 签名: {}", account.data.uname, account.data.sign);
+                            info!("登录信息保存成功");
+                            break;
+                        }
+                        Statue::Expired => {
+                            warn!("{}", scan_info.data.message);
+                            info!("请重新扫描二维码");
+                            Box::pin(self.qrcode()).await; // 对递归调用进行盒装箱
+                        }
+                        Statue::NotConfirmed => {
+                            if is_confirmed_first {
+                                info!("请在手机端确认登录");
+                                is_confirmed_first = false
+                            }
+                        }
+                        Statue::NotScanned => {
+                            if is_first {
+                                info!("请打开bilbil移动端扫描二维码登录");
+                                is_first = false
+                            }
+                        }
+                        Statue::Unknown => warn!("未知错误"),
                     }
+                    //多久轮询一次
+                    sleep(Duration::from_millis(5000 / 3)).await;
                 }
-                Statue::NotScanned => {
-                    if is_first {
-                        info!("请打开bilbil移动端扫描二维码登录");
-                        is_first = false
-                    }
-                }
-                Statue::Unknown => warn!("未知错误"),
             }
-            //多久轮询一次
-            sleep(Duration::from_millis(5000 / 3)).await;
-        }
+            Err(_) => {
+                error!("网络连接错误，请检查网络连接");
+                exit(0);
+            }
+        };
     }
 }
