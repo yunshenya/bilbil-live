@@ -94,9 +94,13 @@ impl Config {
 
 impl Default for Loader {
     fn default() -> Self {
+        //todo: 为什么会出现两遍打印？
+        /*
+        请输入直播间房间号: 请输入直播间房间号: 13620691
+        */
         let mut room_id_str = String::new();
+        print!("请输入直播间房间号: ");
         stdout().flush().unwrap();
-        print!("请输入直播房间号: ");
         stdin().read_line(&mut room_id_str).unwrap();
         let room_id = match room_id_str.trim().parse::<u128>() {
             Ok(room_id) => {
