@@ -66,8 +66,6 @@ impl Config {
                 mode: loader.room.mode,
             }
         }else {
-            let dir = CONFIG_PATH.split("/").next().unwrap();
-            create_dir_all(dir).unwrap();
             let loader = Loader::default();
             let serialized = serde_yaml::to_string(&loader).unwrap();
             let mut file = OpenOptions::new()
