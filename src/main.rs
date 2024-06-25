@@ -5,6 +5,7 @@ use crate::comment::Comment;
 use crate::like::LikeSend;
 use crate::login::Login;
 use log::info;
+use std::sync::Arc;
 use std::time::Duration;
 use tokio::time::sleep;
 use tokio::{join, task};
@@ -23,9 +24,10 @@ mod load_cookies;
 async fn main() {
     init_log();
     Login.new().await;
-    let task1 = task::spawn(async {
+    let share_comment = Arc::new(Comment::new(&Comment::default()).await);
+    let comment = Arc::clone(&share_comment);
+    let task1 = task::spawn(async move {
         loop {
-            let comment = Comment::new(&Comment::default()).await;
             let form = comment.build_form(Option::from(String::from("修炼"))).await;
             comment.send(form).await;
             info!("主人修炼发送成功了( •̀ ω •́ )y");
@@ -35,13 +37,12 @@ async fn main() {
             info!("主人突破发送成功了( •̀ ω •́ )y")
         }
     });
-
-    let task2 = task::spawn(async {
+    let comment2 = Arc::clone(&share_comment);
+    let task2 = task::spawn(async move {
         loop {
             sleep(Duration::from_millis(5000)).await;
-            let comment = Comment::new(&Comment::default()).await;
-            let form2 = comment.build_form(None).await;
-            comment.send(form2).await;
+            let form2 = comment2.build_form(None).await;
+            comment2.send(form2).await;
         }
     });
 

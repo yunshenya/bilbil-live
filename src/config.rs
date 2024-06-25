@@ -1,13 +1,13 @@
-use std::fs::{OpenOptions, read_to_string};
+use log::info;
+use std::fs::{read_to_string, OpenOptions};
 use std::io::{stdin, stdout, Write};
 use std::path::Path;
-use log::info;
 
 use serde::{Deserialize, Serialize};
 
 use crate::api::CONFIG_PATH;
 
-#[derive(Serialize,Deserialize)]
+#[derive(Serialize, Deserialize)]
 struct Loader {
     room: RoomInfo,
 }
@@ -65,7 +65,7 @@ impl Config {
                 visit_id: loader.room.visit_id,
                 mode: loader.room.mode,
             }
-        }else {
+        } else {
             let loader = Loader::default();
             let serialized = serde_yaml::to_string(&loader).unwrap();
             let mut file = OpenOptions::new()
@@ -75,7 +75,7 @@ impl Config {
                 .open(CONFIG_PATH)
                 .unwrap();
             file.write_all(serialized.as_bytes()).unwrap();
-            Config{
+            Config {
                 room_id: loader.room.room_id,
                 msg: loader.room.msg,
                 color: loader.room.color,
@@ -87,34 +87,26 @@ impl Config {
                 click_time: loader.room.click_time,
                 visit_id: loader.room.visit_id,
             }
-
         }
     }
 }
 
 impl Default for Loader {
     fn default() -> Self {
-        //todo: 为什么会出现两遍打印？
-        /*
-        请输入直播间房间号: 请输入直播间房间号: 13620691
-        */
         let mut room_id_str = String::new();
         print!("请输入直播间房间号: ");
         stdout().flush().unwrap();
         stdin().read_line(&mut room_id_str).unwrap();
-        let room_id = match room_id_str.trim().parse::<u128>() {
-            Ok(room_id) => {
-                room_id
-            }
-            Err(_) => {
-                30513598
-            }
-        };
+        let room_id = room_id_str.trim().parse::<u128>().unwrap_or_else(|_| 30513598);
         info!("已创建配置文件");
-        Self{
+        Self {
             room: RoomInfo {
                 room_id,
-                msg: vec!["歡迎來到直播間~".to_string(), "喜歡主播的點點關注，看看右下角歌單~".to_string(), "喜歡主播的點點關注，看看右下角歌單~".to_string()],
+                msg: vec![
+                    "歡迎來到直播間~".to_string(),
+                    "喜歡主播的點點關注，看看右下角歌單~".to_string(),
+                    "喜歡主播的點點關注，看看右下角歌單~".to_string(),
+                ],
                 color: 16777215,
                 mode: "1".to_string(),
                 room_type: 0,

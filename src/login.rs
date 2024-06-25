@@ -92,7 +92,8 @@ impl Login {
         let client = Client::new();
         match client.get(GET_CODE_URL).send().await {
             Ok(qr_response) => {
-                let qrcode: Qrcode = serde_json::from_str(&*qr_response.text().await.unwrap()).unwrap();
+                let qrcode: Qrcode =
+                    serde_json::from_str(&*qr_response.text().await.unwrap()).unwrap();
                 let code = QrCode::new(&qrcode.data.url).unwrap();
                 info!("正在使用二维码登录，已生成二维码");
                 println!("{}", code.render::<unicode::Dense1x2>().build());
