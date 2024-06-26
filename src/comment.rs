@@ -1,3 +1,4 @@
+use std::sync::Arc;
 use crate::api::COMMENT_SEND_URL;
 use log::{info, warn};
 use rand::prelude::IndexedRandom;
@@ -12,7 +13,7 @@ use crate::utils::Utils;
 #[derive(Default)]
 pub struct Comment {
     utils: Utils,
-    config: Config,
+    config: Arc<Config>,
 }
 
 #[derive(Deserialize)]
@@ -38,7 +39,7 @@ struct CommentData {
 impl Comment {
     pub async fn new(&self) -> Self {
         let utils = Utils::new(COMMENT_SEND_URL).await;
-        let config = Config::new().await;
+        let config = Arc::new(Config::new().await);
         Self { utils, config }
     }
 
@@ -46,8 +47,8 @@ impl Comment {
         let msg = if let Some(msg) = rand_msg {
             msg
         } else {
-            let msg_list = self.config.msg.clone();
-            msg_list.choose(&mut thread_rng()).unwrap().clone()
+            let msg_list = &Arc::clone(&self.config).msg;
+            msg_list.choose(&mut thread_rng()).unwrap().to_string()
         };
         Form::new()
             .text("bubble", "0")
