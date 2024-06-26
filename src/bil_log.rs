@@ -49,7 +49,12 @@ impl Log for BilLog {
                     );
                 }
                 Level::Trace => {
-                    println!("{} [{}] | bilbil-live | {}", now, record.level(), record.args());
+                    println!(
+                        "{} [{}] | bilbil-live | {}",
+                        now,
+                        record.level(),
+                        record.args()
+                    );
                 }
             };
         }
