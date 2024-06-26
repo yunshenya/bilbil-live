@@ -26,7 +26,7 @@ struct RoomInfo {
     visit_id: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Default)]
+#[derive(Serialize, Deserialize)]
 pub struct Statistics {
     #[serde(rename = "appId")]
     pub app_id: i32,
@@ -119,6 +119,15 @@ impl Default for Loader {
                 click_time: 2,
                 visit_id: None,
             },
+        }
+    }
+}
+
+impl Default for Statistics{
+    fn default() -> Self {
+        Self{
+            app_id: 100,
+            platform: 5,
         }
     }
 }
