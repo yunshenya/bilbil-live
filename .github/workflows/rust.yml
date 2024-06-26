@@ -17,9 +17,9 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Install Rust Nightly
-      run: rustup toolchain install nightly
+      run: rustup install nightly
     - name: run nightly evn
-      run: rustup run nightly
+      run: rustup default nightly
     - name: Buld bilbil-live
       run: cargo build
     - name: Build release
