@@ -94,7 +94,7 @@ impl Config {
 impl Default for Loader {
     fn default() -> Self {
         let mut room_id_str = String::new();
-        print!("请输入直播间房间号: ");
+        print!("请输入直播间房间号(未填写则为默认): ");
         stdout().flush().unwrap();
         stdin().read_line(&mut room_id_str).unwrap();
         let room_id = room_id_str
