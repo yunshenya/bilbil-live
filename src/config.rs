@@ -123,9 +123,9 @@ impl Default for Loader {
     }
 }
 
-impl Default for Statistics{
+impl Default for Statistics {
     fn default() -> Self {
-        Self{
+        Self {
             app_id: 100,
             platform: 5,
         }

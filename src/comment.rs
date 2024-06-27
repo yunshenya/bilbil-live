@@ -1,10 +1,10 @@
-use std::sync::Arc;
 use crate::api::COMMENT_SEND_URL;
 use log::{info, warn};
 use rand::prelude::IndexedRandom;
 use rand::thread_rng;
 use reqwest::multipart::Form;
 use serde::Deserialize;
+use std::sync::Arc;
 
 use crate::config::Config;
 use crate::load_cookies::CookiesConfig;
