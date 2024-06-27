@@ -3,6 +3,9 @@ name = "bilbil-live"
 version = "0.1.0"
 edition = "2021"
 authors = ["yunshen <yunshen4869@gmail.com>"]
+license = "MIT"
+keywords = ["bilbil", "blibli-live"]
+description = "一个直播间弹幕下载工具"
 
 [dependencies]
 tokio = {version = "1.38.0", features = ["macros", "rt-multi-thread"]}
