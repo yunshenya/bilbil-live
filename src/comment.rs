@@ -1,3 +1,4 @@
+use std::borrow::Cow;
 use crate::api::COMMENT_SEND_URL;
 use log::{info, warn};
 use rand::prelude::IndexedRandom;
@@ -70,7 +71,7 @@ impl Comment {
                 "statistics",
                 serde_json::to_string(&self.config.statistics).unwrap(),
             )
-            .text("mode", self.config.mode.clone())
+            .text("mode", Cow::Owned((&self.config.mode).to_string()))
             .text("reply_attr", "0")
             .text("rnd", CookiesConfig::rnd().to_string())
             .text("room_type", self.config.room_type.to_string())
