@@ -26,6 +26,10 @@ struct RoomInfo {
     visit_id: Option<String>,
 }
 
+enum Color{
+    Normal = 16777215,
+    // FansNom = 5566168
+}
 #[derive(Serialize, Deserialize)]
 pub struct Statistics {
     #[serde(rename = "appId")]
@@ -110,7 +114,7 @@ impl Default for Loader {
                     "喜歡主播的點點關注，看看右下角歌單~".to_string(),
                     "喜歡主播的點點關注，看看右下角歌單~".to_string(),
                 ],
-                color: 16777215,
+                color: Color::Normal as i32,
                 mode: "1".to_string(),
                 room_type: 0,
                 jumpfrom: 71004,
