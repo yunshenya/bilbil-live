@@ -4,7 +4,7 @@ use crate::bil_log::init_log;
 use crate::comment::Comment;
 use crate::like::LikeSend;
 use crate::login::Login;
-use log::info;
+use log::{info, warn};
 use std::sync::Arc;
 use std::time::Duration;
 use tokio::time::sleep;
@@ -47,11 +47,22 @@ async fn main() {
     });
 
     let task3 = task::spawn(async {
+        let mut is_like = true;
         loop {
             sleep(Duration::from_millis(1000)).await;
-            LikeSend::new().await;
+            if is_like {
+                is_like = match LikeSend::new().await {
+                    Ok(_) => {
+                        info!("点赞成功");
+                        true
+                    }
+                    Err(err) => {
+                        warn!("点赞失败,错误码: {}", err);
+                        false
+                    }
+                };
+            }
         }
     });
-    let (handle1, handle2, handle3) = join!(task1, task2, task3);
-    (handle1.unwrap(), handle2.unwrap(), handle3.unwrap());
+    let _ = join!(task1, task2, task3);
 }
