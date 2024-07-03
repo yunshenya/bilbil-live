@@ -5,3 +5,8 @@ fn main() {
         .set_icon("bilibili.ico")
         .compile().unwrap();
 }
+
+#[cfg(unix)]
+fn main() {
+
+}
