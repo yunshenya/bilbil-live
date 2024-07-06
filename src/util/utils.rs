@@ -27,12 +27,7 @@ impl Utils {
             .default_headers(self.headers.clone())
             .build()
             .unwrap();
-        client
-            .post(self.url.clone())
-            .multipart(form)
-            .send()
-            .await
-            .unwrap()
+        client.post(&self.url).multipart(form).send().await.unwrap()
     }
 
     pub async fn sne_get(&self, params: Vec<(&str, &str)>) -> Response {
@@ -40,12 +35,7 @@ impl Utils {
             .default_headers(self.headers.clone())
             .build()
             .unwrap();
-        client
-            .get(self.url.clone())
-            .query(&params)
-            .send()
-            .await
-            .unwrap()
+        client.get(&self.url).query(&params).send().await.unwrap()
     }
 
     pub async fn post_with_form(
@@ -58,7 +48,7 @@ impl Utils {
             .build()
             .unwrap();
         match client
-            .post(self.url.clone())
+            .post(&self.url)
             .headers(headers)
             .form(&params)
             .send()
