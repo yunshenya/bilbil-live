@@ -1,7 +1,8 @@
+use log::error;
 use crate::load_cookies::CookiesConfig;
 use reqwest::header::{HeaderMap, COOKIE, USER_AGENT};
 use reqwest::multipart::Form;
-use reqwest::{Client, Response};
+use reqwest::{Client, ClientBuilder, Response};
 
 #[derive(Default)]
 pub struct Utils {
@@ -45,5 +46,22 @@ impl Utils {
             .send()
             .await
             .unwrap()
+    }
+
+    pub async fn  post_with_form(&self, params: Vec<(&str, &str)>, headers:HeaderMap) -> Result<Response, ()>{
+        let client = ClientBuilder::new()
+            .default_headers(self.headers.clone())
+            .build().unwrap();
+        match client.post(self.url.clone())
+            .headers(headers)
+            .form(&params)
+            .send().await {
+            Ok(res) => {
+                Ok(res)
+            }
+            Err(err) => {
+                Err(error!("{}" ,err))
+            }
+        }
     }
 }

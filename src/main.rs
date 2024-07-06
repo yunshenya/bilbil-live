@@ -1,29 +1,30 @@
 #![feature(duration_constructors)]
 
-use crate::bil_log::init_log;
-use crate::comment::Comment;
-use crate::like::LikeSend;
+use bil_log::init_log;
+use plugin::comment::Comment;
+use plugin::like::LikeSend;
 use crate::login::Login;
 use log::{info, warn};
 use std::sync::Arc;
 use std::time::Duration;
 use tokio::time::sleep;
 use tokio::{join, task};
+use crate::plugin::sign::sign;
 
 mod api;
-mod bil_log;
-mod comment;
 mod config;
-mod like;
 mod login;
 mod utils;
 
 mod load_cookies;
+mod plugin;
+pub mod bil_log;
 
 #[tokio::main]
 async fn main() {
     init_log();
     Login.new().await;
+    sign().await;
     let share_comment = Arc::new(Comment::new(&Comment::default()).await);
     let comment = Arc::clone(&share_comment);
     let task1 = task::spawn(async move {
