@@ -1,4 +1,4 @@
-use crate::api::{COOKIES_PATH, GET_LIVE_INFO};
+use crate::arrangement::api::{COOKIES_PATH, GET_LIVE_INFO};
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
 use std::borrow::Cow;

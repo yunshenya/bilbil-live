@@ -5,7 +5,7 @@ use std::path::Path;
 
 use serde::{Deserialize, Serialize};
 
-use crate::api::CONFIG_PATH;
+use crate::arrangement::api::CONFIG_PATH;
 
 #[derive(Serialize, Deserialize)]
 struct Loader {

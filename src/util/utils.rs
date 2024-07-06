@@ -1,5 +1,5 @@
 use log::error;
-use crate::load_cookies::CookiesConfig;
+use crate::logged::load_cookies::CookiesConfig;
 use reqwest::header::{HeaderMap, COOKIE, USER_AGENT};
 use reqwest::multipart::Form;
 use reqwest::{Client, ClientBuilder, Response};

@@ -1,4 +1,4 @@
-use crate::api::COMMENT_SEND_URL;
+use crate::arrangement::api::COMMENT_SEND_URL;
 use log::{info, warn};
 use rand::prelude::IndexedRandom;
 use rand::thread_rng;
@@ -7,9 +7,9 @@ use serde::Deserialize;
 use std::borrow::Cow;
 use std::sync::Arc;
 
-use crate::config::Config;
-use crate::load_cookies::CookiesConfig;
-use crate::utils::Utils;
+use crate::arrangement::config::Config;
+use crate::logged::load_cookies::CookiesConfig;
+use crate::util::utils::Utils;
 
 #[derive(Default)]
 pub struct Comment {

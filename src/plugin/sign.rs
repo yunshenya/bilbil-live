@@ -1,9 +1,9 @@
 use log::{info, warn};
 use reqwest::header::{HeaderMap, REFERER};
 use serde::{Deserialize};
-use crate::api::SINGN;
-use crate::load_cookies::CookiesConfig;
-use crate::utils::Utils;
+use crate::arrangement::api::SINGN;
+use crate::logged::load_cookies::CookiesConfig;
+use crate::util::utils::Utils;
 
 #[derive(Deserialize)]
 struct SignJson{

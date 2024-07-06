@@ -1,5 +1,5 @@
-use crate::api::{COOKIES_PATH, GET_ACCOUNT, GET_CODE_URL, SCAN_INFO};
-use crate::load_cookies::CookiesConfig;
+use crate::arrangement::api::{COOKIES_PATH, GET_ACCOUNT, GET_CODE_URL, SCAN_INFO};
+use crate::logged::load_cookies::CookiesConfig;
 use log::{error, info, warn};
 use qrcode::render::unicode;
 use qrcode::QrCode;

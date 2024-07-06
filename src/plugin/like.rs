@@ -1,10 +1,10 @@
 use reqwest::multipart::Form;
 use serde::Deserialize;
 
-use crate::api::SEND_LIKE_URL;
-use crate::config::Config;
-use crate::load_cookies::CookiesConfig;
-use crate::utils::Utils;
+use crate::arrangement::api::SEND_LIKE_URL;
+use crate::arrangement::config::Config;
+use crate::logged::load_cookies::CookiesConfig;
+use crate::util::utils::Utils;
 
 pub struct LikeSend;
 

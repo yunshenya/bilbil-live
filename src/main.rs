@@ -1,9 +1,9 @@
 #![feature(duration_constructors)]
 
-use bil_log::init_log;
+use arrangement::bil_log::init_log;
 use plugin::comment::Comment;
 use plugin::like::LikeSend;
-use crate::login::Login;
+use logged::login::Login;
 use log::{info, warn};
 use std::sync::Arc;
 use std::time::Duration;
@@ -11,14 +11,10 @@ use tokio::time::sleep;
 use tokio::{join, task};
 use crate::plugin::sign::sign;
 
-mod api;
-mod config;
-mod login;
-mod utils;
-
-mod load_cookies;
 mod plugin;
-pub mod bil_log;
+mod logged;
+mod arrangement;
+mod util;
 
 #[tokio::main]
 async fn main() {
