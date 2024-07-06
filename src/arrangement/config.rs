@@ -26,7 +26,7 @@ struct RoomInfo {
     visit_id: Option<String>,
 }
 
-enum Color{
+enum Color {
     Normal = 16777215,
     // FansNom = 5566168
 }

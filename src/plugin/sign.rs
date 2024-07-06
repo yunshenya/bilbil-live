@@ -1,16 +1,16 @@
-use log::{info, warn};
-use reqwest::header::{HeaderMap, REFERER};
-use serde::{Deserialize};
 use crate::arrangement::api::SINGN;
 use crate::logged::load_cookies::CookiesConfig;
 use crate::util::utils::Utils;
+use log::{info, warn};
+use reqwest::header::{HeaderMap, REFERER};
+use serde::Deserialize;
 
 #[derive(Deserialize)]
-struct SignJson{
-    message:String
+struct SignJson {
+    message: String,
 }
 
-pub async fn sign(){
+pub async fn sign() {
     let mut headers = HeaderMap::new();
     let csrf = &*CookiesConfig::csrf();
     headers.insert(REFERER, "https://www.bilibili.com".parse().unwrap());

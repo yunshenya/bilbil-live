@@ -1,19 +1,19 @@
 #![feature(duration_constructors)]
 
+use crate::plugin::sign::sign;
 use arrangement::bil_log::init_log;
+use log::{info, warn};
+use logged::login::Login;
 use plugin::comment::Comment;
 use plugin::like::LikeSend;
-use logged::login::Login;
-use log::{info, warn};
 use std::sync::Arc;
 use std::time::Duration;
 use tokio::time::sleep;
 use tokio::{join, task};
-use crate::plugin::sign::sign;
 
-mod plugin;
-mod logged;
 mod arrangement;
+mod logged;
+mod plugin;
 mod util;
 
 #[tokio::main]
