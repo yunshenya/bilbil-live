@@ -2,12 +2,13 @@ use crate::logged::load_cookies::CookiesConfig;
 use log::error;
 use reqwest::header::{HeaderMap, COOKIE, USER_AGENT};
 use reqwest::multipart::Form;
-use reqwest::{Client, ClientBuilder, Response};
+use reqwest::{Client, Response};
+use serde::Serialize;
 
 #[derive(Default)]
 pub struct Utils {
     url: String,
-    headers: HeaderMap,
+    client: Client,
 }
 
 impl Utils {
@@ -16,38 +17,44 @@ impl Utils {
         let mut headers = HeaderMap::new();
         headers.insert(USER_AGENT, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36".parse().unwrap());
         headers.insert(COOKIE, load_cookies.cookies.parse().unwrap());
+        let client = Client::builder().default_headers(headers).build().unwrap();
         Self {
             url: url.to_string(),
-            headers,
+            client,
         }
     }
 
     pub async fn send_post(&self, form: Form) -> Response {
-        let client = Client::builder()
-            .default_headers(self.headers.clone())
-            .build()
-            .unwrap();
-        client.post(&self.url).multipart(form).send().await.unwrap()
+        self.client
+            .post(&self.url)
+            .multipart(form)
+            .send()
+            .await
+            .unwrap()
     }
 
-    pub async fn sne_get(&self, params: Vec<(&str, &str)>) -> Response {
-        let client = Client::builder()
-            .default_headers(self.headers.clone())
-            .build()
-            .unwrap();
-        client.get(&self.url).query(&params).send().await.unwrap()
+    pub async fn sne_get<T>(&self, params: Vec<(T, T)>) -> Response
+    where
+        T: Serialize,
+    {
+        self.client
+            .get(&self.url)
+            .query(&params)
+            .send()
+            .await
+            .unwrap()
     }
 
-    pub async fn post_with_form(
+    pub async fn post_with_form<T>(
         &self,
-        params: Vec<(&str, &str)>,
+        params: Vec<(T, T)>,
         headers: HeaderMap,
-    ) -> Result<Response, ()> {
-        let client = ClientBuilder::new()
-            .default_headers(self.headers.clone())
-            .build()
-            .unwrap();
-        match client
+    ) -> Result<Response, ()>
+    where
+        T: Serialize,
+    {
+        match self
+            .client
             .post(&self.url)
             .headers(headers)
             .form(&params)
