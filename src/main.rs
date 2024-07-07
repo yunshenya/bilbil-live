@@ -1,6 +1,6 @@
 #![feature(duration_constructors)]
 
-use crate::plugin::sign::sign;
+use crate::plugin::sign::{do_sign, get_video_info, live_add};
 use arrangement::bil_log::init_log;
 use log::{info, warn};
 use logged::login::Login;
@@ -20,7 +20,9 @@ mod util;
 async fn main() {
     init_log();
     Login.new().await;
-    sign().await;
+    live_add().await;
+    do_sign().await;
+    get_video_info("BV1wW421d7TZ").await;
     let share_comment = Arc::new(Comment::new(&Comment::default()).await);
     let comment = Arc::clone(&share_comment);
     let task1 = task::spawn(async move {

@@ -15,7 +15,9 @@ pub const CONFIG_PATH: &str = "config/config.yaml";
 pub const GET_ACCOUNT: &str = "https://api.bilibili.com/x/member/web/account";
 //获取直播间信息
 pub const GET_LIVE_INFO: &str = "https://api.live.bilibili.com/room/v1/Room/get_info";
-// 大会员签到
-pub const SINGN: &str = "https://api.bilibili.com/pgc/activity/score/task/sign";
-
-//每日签到 https://manga.bilibili.com/twirp/activity.v1.Activity/ClockIn
+//每日签到
+pub const ADD: &str = "https://api.bilibili.com/x/vip/experience/add";
+//视频信息 bvid
+pub const VIDEO_INFO: &str = "https://api.bilibili.com/x/web-interface/view";
+//直播签到
+pub const DOSINGN: &str = "https://api.live.bilibili.com/xlive/web-ucenter/v1/sign/DoSign";

@@ -1,9 +1,9 @@
-use crate::logged::load_cookies::CookiesConfig;
-use log::error;
 use reqwest::header::{HeaderMap, COOKIE, USER_AGENT};
 use reqwest::multipart::Form;
-use reqwest::{Client, Response};
+use reqwest::{Client, Error, Response};
 use serde::Serialize;
+
+use crate::logged::load_cookies::CookiesConfig;
 
 #[derive(Default)]
 pub struct Utils {
@@ -49,7 +49,7 @@ impl Utils {
         &self,
         params: Vec<(T, T)>,
         headers: HeaderMap,
-    ) -> Result<Response, ()>
+    ) -> Result<Response, String>
     where
         T: Serialize,
     {
@@ -62,7 +62,14 @@ impl Utils {
             .await
         {
             Ok(res) => Ok(res),
-            Err(err) => Err(error!("{}", err)),
+            Err(err) => Err(err.to_string()),
+        }
+    }
+
+    pub async fn send_get(&self) -> Result<Response, Error> {
+        match self.client.get(&self.url).send().await {
+            Ok(resp) => Ok(resp),
+            Err(err) => Err(err),
         }
     }
 }
