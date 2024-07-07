@@ -116,7 +116,7 @@ impl Login {
                             info!("{}", "登录成功");
                             let resp = client
                                 .get(scan_info.data.url)
-                                .header(COOKIE, cookie.clone())
+                                .header(COOKIE, &cookie)
                                 .send()
                                 .await
                                 .unwrap();
