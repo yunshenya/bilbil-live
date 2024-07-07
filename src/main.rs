@@ -26,8 +26,7 @@ async fn main() {
     run_live().await;
 }
 
-
-async fn run_live(){
+async fn run_live() {
     let share_comment = Arc::new(Comment::new(&Comment::default()).await);
     let comment = Arc::clone(&share_comment);
     let task1 = task::spawn(async move {
