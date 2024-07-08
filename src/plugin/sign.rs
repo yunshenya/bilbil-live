@@ -46,7 +46,12 @@ pub async fn do_sign() {
         Ok(resp) => {
             let do_sign_json =
                 serde_json::from_str::<DoSignJson>(&resp.text().await.unwrap()).unwrap();
-            info!("{}", do_sign_json.message)
+            let do_message = if do_sign_json.message.eq("0") {
+                "直播奖励领取成功"
+            }else {
+                &do_sign_json.message.to_string()
+            };
+            info!("{}", do_message)
         }
         Err(err) => {
             error!("签到失败: {}", err);
