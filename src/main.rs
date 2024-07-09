@@ -1,6 +1,7 @@
 #![feature(duration_constructors)]
 
-use crate::plugin::sign::{do_sign, get_video_info, live_add};
+use crate::plugin::sign::{do_sign, live_add};
+use crate::plugin::video::FlashVideoWatch;
 use arrangement::bil_log::init_log;
 use log::{info, warn};
 use logged::login::Login;
@@ -19,15 +20,15 @@ mod util;
 #[tokio::main]
 async fn main() {
     init_log();
-    Login.new().await;
+    Login::new().await;
     live_add().await;
     do_sign().await;
-    get_video_info("BV1wW421d7TZ").await;
+    FlashVideoWatch::new("BV1wW421d7TZ").await;
     run_live().await;
 }
 
 async fn run_live() {
-    let share_comment = Arc::new(Comment::new(&Comment::default()).await);
+    let share_comment = Arc::new(Comment::new().await);
     let comment = Arc::clone(&share_comment);
     let task1 = task::spawn(async move {
         loop {

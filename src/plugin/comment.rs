@@ -11,7 +11,6 @@ use crate::arrangement::config::Config;
 use crate::logged::load_cookies::CookiesConfig;
 use crate::util::utils::Utils;
 
-#[derive(Default)]
 pub struct Comment {
     utils: Utils,
     config: Arc<Config>,
@@ -38,7 +37,7 @@ struct CommentData {
 }
 
 impl Comment {
-    pub async fn new(&self) -> Self {
+    pub async fn new() -> Self {
         let utils = Utils::new(COMMENT_SEND_URL).await;
         let config = Arc::new(Config::new().await);
         Self { utils, config }

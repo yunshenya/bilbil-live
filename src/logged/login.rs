@@ -71,24 +71,24 @@ impl From<i32> for Statue {
 }
 
 impl Login {
-    pub async fn new(&self) {
+    pub async fn new() {
         let path = Path::new(COOKIES_PATH);
         if path.exists() {
             let config = CookiesConfig::default();
             if config.is_login {
                 info!("已找到配置文件，登录成功");
             } else {
-                self.qrcode().await;
+                Login::qrcode().await;
             }
         } else {
             let dir = COOKIES_PATH.split("/").next().unwrap();
             create_dir_all(dir).unwrap();
             info!("创建cookie文件: {}", dir);
-            self.qrcode().await;
+            Login::qrcode().await;
         }
     }
 
-    async fn qrcode(&self) {
+    async fn qrcode() {
         let client = Client::new();
         match client.get(GET_CODE_URL).send().await {
             Ok(qr_response) => {
@@ -155,7 +155,7 @@ impl Login {
                         Statue::Expired => {
                             warn!("{}", scan_info.data.message);
                             info!("请重新扫描二维码");
-                            Box::pin(self.qrcode()).await; // 对递归调用进行盒装箱
+                            Box::pin(Login::qrcode()).await; // 对递归调用进行盒装箱
                         }
                         Statue::NotConfirmed => {
                             if is_confirmed_first {

@@ -48,7 +48,7 @@ pub async fn do_sign() {
                 serde_json::from_str::<DoSignJson>(&resp.text().await.unwrap()).unwrap();
             let do_message = if do_sign_json.message.eq("0") {
                 "直播奖励领取成功"
-            }else {
+            } else {
                 &do_sign_json.message.to_string()
             };
             info!("{}", do_message)
@@ -57,11 +57,4 @@ pub async fn do_sign() {
             error!("签到失败: {}", err);
         }
     }
-}
-
-pub async fn get_video_info(bvid: &str) {
-    let util = Utils::new(VIDEO_INFO).await;
-    let params = vec![("bvid", bvid)];
-    let response = util.sne_get(params).await;
-    println!("{}", response.text().await.unwrap());
 }
