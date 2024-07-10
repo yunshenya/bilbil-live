@@ -110,9 +110,7 @@ impl FlashVideoWatch {
                 let wts = &*resp_key.wts.to_string();
                 let w_rid = &*resp_key.w_rid.to_string();
                 println!("{} {}", w_rid, wts);
-                let utils_nav =
-                    Utils::new(JUDGE)
-                        .await;
+                let utils_nav = Utils::new(JUDGE).await;
                 let params = vec![
                     ("bvid", bvid),
                     ("cid", cid),

@@ -43,7 +43,7 @@ impl Comment {
     }
 
     pub async fn build_form(&self, rand_msg: Option<String>) -> Form {
-        let csrf  = CookiesConfig::csrf();
+        let csrf = CookiesConfig::csrf();
         let msg = if let Some(msg) = rand_msg {
             msg
         } else {
