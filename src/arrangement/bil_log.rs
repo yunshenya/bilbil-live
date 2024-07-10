@@ -52,7 +52,7 @@ impl Log for BilLog {
                     println!(
                         "{} [{}] | bilbil-live | {}",
                         now,
-                        record.level(),
+                        Blue.paint("未知"),
                         record.args()
                     );
                 }
