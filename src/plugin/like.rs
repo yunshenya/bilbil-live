@@ -18,6 +18,7 @@ impl LikeSend {
         let utils = Utils::new(SEND_LIKE_URL).await;
         let config = Config::new().await;
         let load_config = CookiesConfig::default();
+        let csrf = CookiesConfig::csrf();
         let form = Form::new()
             .text("click_time", config.click_time.to_string())
             .text("room_id", config.room_id.to_string())
@@ -30,8 +31,8 @@ impl LikeSend {
                     .uid
                     .to_string(),
             )
-            .text("csrf_token", CookiesConfig::csrf())
-            .text("csrf", CookiesConfig::csrf())
+            .text("csrf_token", csrf.to_string())
+            .text("csrf", csrf.to_string())
             .text(
                 "visit_id",
                 if let Some(visit_id) = config.visit_id {

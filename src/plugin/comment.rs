@@ -4,7 +4,6 @@ use rand::prelude::IndexedRandom;
 use rand::thread_rng;
 use reqwest::multipart::Form;
 use serde::Deserialize;
-use std::borrow::Cow;
 use std::sync::Arc;
 
 use crate::arrangement::config::Config;
@@ -44,6 +43,7 @@ impl Comment {
     }
 
     pub async fn build_form(&self, rand_msg: Option<String>) -> Form {
+        let csrf  = CookiesConfig::csrf();
         let msg = if let Some(msg) = rand_msg {
             msg
         } else {
@@ -64,13 +64,13 @@ impl Comment {
                     String::new()
                 },
             )
-            .text("csrf", CookiesConfig::csrf())
-            .text("csrf_token", CookiesConfig::csrf())
+            .text("csrf", csrf.to_string())
+            .text("csrf_token", csrf.to_string())
             .text(
                 "statistics",
                 serde_json::to_string(&self.config.statistics).unwrap(),
             )
-            .text("mode", Cow::Owned((&self.config.mode).to_string()))
+            .text("mode", (&self.config.mode).to_string())
             .text("reply_attr", "0")
             .text("rnd", CookiesConfig::rnd().to_string())
             .text("room_type", self.config.room_type.to_string())
