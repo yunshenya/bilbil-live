@@ -23,7 +23,7 @@ async fn main() {
     Login::new().await;
     live_add().await;
     do_sign().await;
-    FlashVideoWatch::new("BV1wW421d7TZ").await;
+    FlashVideoWatch::new("BV1vb421E7TQ").await;
     run_live().await;
 }
 

@@ -1,4 +1,4 @@
-use crate::arrangement::api::{ADD, DOSINGN, VIDEO_INFO};
+use crate::arrangement::api::{ADD, DOSINGN};
 use crate::logged::load_cookies::CookiesConfig;
 use crate::util::utils::Utils;
 use log::{error, info, warn};

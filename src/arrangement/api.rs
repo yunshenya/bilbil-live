@@ -21,3 +21,7 @@ pub const ADD: &str = "https://api.bilibili.com/x/vip/experience/add";
 pub const VIDEO_INFO: &str = "https://api.bilibili.com/x/web-interface/view";
 //直播签到
 pub const DOSINGN: &str = "https://api.live.bilibili.com/xlive/web-ucenter/v1/sign/DoSign";
+
+pub const NAV: &str =  "https://api.bilibili.com/x/web-interface/nav";
+
+pub const JUDGE: &str = "https://api.bilibili.com/x/web-interface/view/conclusion/judge";
