@@ -3,6 +3,7 @@ use chrono::Local;
 use log::Level::{Debug, Error, Info};
 use log::{info, set_logger, set_max_level, Level, LevelFilter, Log, Metadata, Record};
 use std::io::{stdout, Write};
+use ansi_term::{Colour, Style};
 
 struct BilLog;
 
@@ -15,44 +16,51 @@ impl Log for BilLog {
         if self.enabled(record.metadata()) {
             let fmt = "%Y年%m月%d日 %H:%M:%S";
             let now = Local::now().format(fmt);
+            let pink = Colour::RGB(255, 192, 203); //粉色
+            let app_name = Style::new().fg(pink).paint("bilbil-live");
             match record.level() {
                 Error => {
                     println!(
-                        "{} [{}] | bilbil-live | {}",
+                        "{} [{}] | {} | {}",
                         Red.paint(now.to_string()),
                         Red.paint("杂鱼"),
+                        app_name,
                         Red.paint(record.args().to_string())
                     );
                 }
                 Level::Warn => {
                     println!(
-                        "{} [{}] | bilbil-live| {}",
+                        "{} [{}] | {} | {}",
                         Yellow.paint(now.to_string()),
                         Yellow.paint("笨蛋"),
+                        app_name,
                         Yellow.paint(record.args().to_string())
                     );
                 }
                 Info => {
                     println!(
-                        "{} [{}] | bilbil-live | {}",
+                        "{} [{}] | {} | {}",
                         Purple.paint(now.to_string()),
                         Blue.paint("摸鱼"),
+                        app_name,
                         Green.paint(record.args().to_string())
                     );
                 }
                 Debug => {
                     println!(
-                        "{} [{}] | bilbil-live | {}",
+                        "{} [{}] | {} | {}",
                         Blue.paint(now.to_string()),
                         Yellow.paint("雌小鬼"),
+                        app_name,
                         Green.paint(record.args().to_string())
                     );
                 }
                 Level::Trace => {
                     println!(
-                        "{} [{}] | bilbil-live | {}",
+                        "{} [{}] | {} | {}",
                         now,
                         Blue.paint("未知"),
+                        app_name,
                         record.args()
                     );
                 }
