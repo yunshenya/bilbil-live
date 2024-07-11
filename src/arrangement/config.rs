@@ -56,7 +56,7 @@ impl Config {
         let path = Path::new(CONFIG_PATH);
         if path.exists() {
             let yaml_str = read_to_string(CONFIG_PATH).unwrap();
-            let loader: Loader = serde_yaml::from_str(&*yaml_str).unwrap();
+            let loader = serde_yaml::from_str::<Loader>(&yaml_str).unwrap();
             Self {
                 room_id: loader.room.room_id,
                 msg: loader.room.msg,
@@ -104,7 +104,7 @@ impl Default for Loader {
         let room_id = room_id_str
             .trim()
             .parse::<u128>()
-            .unwrap_or_else(|_| 30513598);
+            .unwrap_or(30513598);
         info!("已创建配置文件");
         Self {
             room: RoomInfo {

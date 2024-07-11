@@ -55,8 +55,9 @@ struct RespKey<'a> {
 pub struct FlashVideoWatch;
 
 impl FlashVideoWatch {
-    pub async fn new(bvid: &str) {
+    pub async fn new(bvid: &str) ->Self{
         FlashVideoWatch::get_video_info(bvid).await;
+        Self
     }
 
     async fn get_video_info(bvid: &str) {

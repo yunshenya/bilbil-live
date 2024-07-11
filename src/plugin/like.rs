@@ -14,7 +14,7 @@ struct LikeResult {
 }
 
 impl LikeSend {
-    pub async fn new() -> Result<(), String> {
+    pub async fn new() -> Result<Self, String> {
         let utils = Utils::new(SEND_LIKE_URL).await;
         let config = Config::new().await;
         let load_config = CookiesConfig::default();
@@ -34,18 +34,13 @@ impl LikeSend {
             .text("csrf_token", csrf.to_string())
             .text("csrf", csrf.to_string())
             .text(
-                "visit_id",
-                if let Some(visit_id) = config.visit_id {
-                    visit_id
-                } else {
-                    String::new()
-                },
+                "visit_id",config.visit_id.unwrap_or_default()
             );
 
         let result = utils.send_post(form).await;
-        let data_code: LikeResult = serde_json::from_str(&*result.text().await.unwrap()).unwrap();
+        let data_code = serde_json::from_str::<LikeResult>(&result.text().await.unwrap()).unwrap();
         if data_code.code == 0 {
-            return Ok(());
+            Ok(Self)
         } else {
             Err(data_code.code.to_string())
         }

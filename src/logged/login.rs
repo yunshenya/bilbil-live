@@ -71,20 +71,23 @@ impl From<i32> for Statue {
 }
 
 impl Login {
-    pub async fn new() {
+    pub async fn new() -> Self{
         let path = Path::new(COOKIES_PATH);
         if path.exists() {
             let config = CookiesConfig::default();
             if config.is_login {
                 info!("已找到配置文件，登录成功");
+                Self
             } else {
                 Login::qrcode().await;
+                Self
             }
         } else {
             let dir = COOKIES_PATH.split("/").next().unwrap();
             create_dir_all(dir).unwrap();
             info!("创建cookie文件: {}", dir);
             Login::qrcode().await;
+            Self
         }
     }
 
@@ -93,7 +96,7 @@ impl Login {
         match client.get(GET_CODE_URL).send().await {
             Ok(qr_response) => {
                 let qrcode: Qrcode =
-                    serde_json::from_str(&*qr_response.text().await.unwrap()).unwrap();
+                    serde_json::from_str(&qr_response.text().await.unwrap()).unwrap();
                 let code = QrCode::new(&qrcode.data.url).unwrap();
                 info!("正在使用二维码登录，已生成二维码");
                 println!("{}", code.render::<unicode::Dense1x2>().build());
@@ -110,7 +113,7 @@ impl Login {
                             .join("; "),
                         is_scan.text().await.unwrap(),
                     );
-                    let scan_info: CodeResult = serde_json::from_str(&*text).unwrap();
+                    let scan_info = serde_json::from_str::<CodeResult>(&text).unwrap();
                     match (scan_info.data.code as i32).into() {
                         Statue::Success => {
                             info!("{}", "登录成功");
@@ -133,7 +136,7 @@ impl Login {
                                 .await
                                 .unwrap();
                             let account: Account =
-                                serde_json::from_str(&*account_resp.text().await.unwrap()).unwrap();
+                                serde_json::from_str(&account_resp.text().await.unwrap()).unwrap();
                             let config = CookiesConfig {
                                 refresh_token: scan_info.data.refresh_token,
                                 cookies,

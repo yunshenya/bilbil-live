@@ -49,9 +49,7 @@ impl CookiesConfig {
             .send()
             .await
             .unwrap();
-        let room_info: RoomInfo =
-            serde_json::from_str(&*room_info_resp.text().await.unwrap()).unwrap();
-        return room_info;
+        serde_json::from_str::<RoomInfo>(&room_info_resp.text().await.unwrap()).unwrap()
     }
 
     pub fn rnd() -> u64 {
@@ -66,7 +64,7 @@ impl CookiesConfig {
 impl Default for CookiesConfig {
     fn default() -> Self {
         let cookies_str = read_to_string(COOKIES_PATH).unwrap();
-        let cookies: CookiesConfig = serde_yaml::from_str(&*cookies_str).unwrap();
+        let cookies = serde_yaml::from_str::<CookiesConfig>(&cookies_str).unwrap();
         Self {
             refresh_token: cookies.refresh_token,
             cookies: cookies.cookies,

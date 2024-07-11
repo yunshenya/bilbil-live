@@ -5,7 +5,7 @@ edition = "2021"
 authors = ["yunshen <yunshen4869@gmail.com>"]
 license = "MIT"
 keywords = ["bilbil", "blibli-live"]
-description = "一个直播间弹幕下载工具"
+description = "一个直播间弹幕发送工具"
 build = "build.rs"
 
 [build-dependencies]
