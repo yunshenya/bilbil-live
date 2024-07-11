@@ -5,7 +5,6 @@ use serde::Serialize;
 
 use crate::logged::load_cookies::CookiesConfig;
 
-#[derive(Default)]
 pub struct Utils {
     url: String,
     client: Client,
