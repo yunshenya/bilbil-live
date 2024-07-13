@@ -110,15 +110,14 @@ impl FlashVideoWatch {
                 let resp_key = serde_json::from_str::<RespKey>(&string).unwrap();
                 let wts = &*resp_key.wts.to_string();
                 let w_rid = &*resp_key.w_rid.to_string();
-                println!("{} {}", w_rid, wts);
                 let utils_nav = Utils::new(JUDGE).await;
                 let params = vec![
                     ("bvid", bvid),
                     ("cid", cid),
                     ("up_mid", up_mid),
                     ("web_location", "333.788"),
-                    ("w_rid", "55605342e22f29c8a943d7adbb03e35b"),
-                    ("wts", "1720583502"),
+                    ("w_rid", w_rid),
+                    ("wts", wts),
                 ];
                 let response = utils_nav.sne_get(params).await;
                 println!("{}", response.text().await.unwrap());
