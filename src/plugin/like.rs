@@ -33,9 +33,7 @@ impl LikeSend {
             )
             .text("csrf_token", csrf.to_string())
             .text("csrf", csrf.to_string())
-            .text(
-                "visit_id",config.visit_id.unwrap_or_default()
-            );
+            .text("visit_id", config.visit_id.unwrap_or_default());
 
         let result = utils.send_post(form).await;
         let data_code = serde_json::from_str::<LikeResult>(&result.text().await.unwrap()).unwrap();

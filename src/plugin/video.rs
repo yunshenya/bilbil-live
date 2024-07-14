@@ -55,7 +55,7 @@ struct RespKey<'a> {
 pub struct FlashVideoWatch;
 
 impl FlashVideoWatch {
-    pub async fn new(bvid: &str) ->Self{
+    pub async fn new(bvid: &str) -> Self {
         FlashVideoWatch::get_video_info(bvid).await;
         Self
     }
@@ -67,7 +67,7 @@ impl FlashVideoWatch {
         let video_json =
             serde_json::from_str::<VideoJson>(&response.text().await.unwrap()).unwrap();
         println!("投币量为: {:?}", video_json.data.stat.coin);
-        println!("{}", video_json.data.stat.dislike);
+        println!("点踩: {}", video_json.data.stat.dislike);
         println!("点赞数为: {}", video_json.data.stat.like);
         println!("播放量: {}", video_json.data.stat.view);
         println!("cid: {}", video_json.data.cid);

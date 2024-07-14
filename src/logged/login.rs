@@ -71,7 +71,7 @@ impl From<i32> for Statue {
 }
 
 impl Login {
-    pub async fn new() -> Self{
+    pub async fn new() -> Self {
         let path = Path::new(COOKIES_PATH);
         if path.exists() {
             let config = CookiesConfig::default();

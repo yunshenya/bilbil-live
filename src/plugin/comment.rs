@@ -57,7 +57,8 @@ impl Comment {
             .text("fontsize", "25")
             .text("jumpfrom", self.config.jumpfrom.to_string())
             .text(
-                "replay_dmid",self.config.replay_dmid.clone().unwrap_or_default()
+                "replay_dmid",
+                self.config.replay_dmid.clone().unwrap_or_default(),
             )
             .text("csrf", csrf.to_string())
             .text("csrf_token", csrf.to_string())
@@ -77,7 +78,8 @@ impl Comment {
         let result = self.utils.send_post(form).await.text().await.unwrap();
         let comment_data = serde_json::from_str::<CommentData>(&result).unwrap();
         if comment_data.code == 0 || comment_data.message.is_none() {
-            let content = serde_json::from_str::<Extra>(&comment_data.data.mode_info.extra).unwrap();
+            let content =
+                serde_json::from_str::<Extra>(&comment_data.data.mode_info.extra).unwrap();
             info!("消息发送成功 {}", content.content)
         } else {
             warn!("消息发送失败 {}", comment_data.message.unwrap())

@@ -1,9 +1,9 @@
 use ansi_term::Color::{Blue, Green, Purple, Red, Yellow};
+use ansi_term::{Colour, Style};
 use chrono::Local;
 use log::Level::{Debug, Error, Info};
 use log::{info, set_logger, set_max_level, Level, LevelFilter, Log, Metadata, Record};
 use std::io::{stdout, Write};
-use ansi_term::{Colour, Style};
 
 struct BilLog;
 
@@ -83,9 +83,10 @@ pub fn init_log() {
 | '_`\ | | | | | '_`\ | | | |(______)| | | |( ) ( ) /'__`\
 | |_) )| | | | | |_) )| | | |        | | | || \_/ |(  ___/
 (_,__/'(_)(___)(_,__/'(_)(___)      (___)(_)`\___/'`\____)
-                    {}
+            作者: {}  版本:{}
     "#,
-                Yellow.paint("作者: 云深不知处")
+                Yellow.paint("云深不知处"),
+                Blue.paint("v3.1.1")
             );
             let picture = Purple.paint(banner);
             println!("{}", picture);

@@ -18,7 +18,7 @@ LegalCopyright = "Copyright © 2024"
 
 
 [dependencies]
-tokio = {version = "1.38.0", features = ["macros", "rt-multi-thread"]}
+tokio = {version = "1.38.0", features = ["macros", "rt-multi-thread", "rt"] }
 serde_yaml = "0.9.33"
 serde = { version = "1.0.203", features = ["derive"] }
 reqwest = {version = "0.12.4", features = ["multipart", "cookies", "json"] }
