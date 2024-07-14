@@ -26,7 +26,7 @@ impl LikeSend {
             .text(
                 "anchor_id",
                 CookiesConfig::anchor_id(config.room_id)
-                    .await
+                    .await.unwrap()
                     .data
                     .uid
                     .to_string(),
@@ -35,12 +35,16 @@ impl LikeSend {
             .text("csrf", csrf.to_string())
             .text("visit_id", config.visit_id.unwrap_or_default());
 
-        let result = utils.send_post(form).await;
-        let data_code = serde_json::from_str::<LikeResult>(&result.text().await.unwrap()).unwrap();
-        if data_code.code == 0 {
-            Ok(Self)
-        } else {
-            Err(data_code.code.to_string())
+        match utils.send_post(form).await {
+            Ok(result) => {
+                let data_code = serde_json::from_str::<LikeResult>(&result.text().await.unwrap()).unwrap();
+                if data_code.code == 0 {
+                    Ok(Self)
+                } else {
+                    Err(data_code.code.to_string())
+                }
+            }
+            Err(err) => Err(err.to_string())
         }
     }
 }

@@ -23,13 +23,15 @@ impl Utils {
         }
     }
 
-    pub async fn send_post(&self, form: Form) -> Response {
-        self.client
+    pub async fn send_post(&self, form: Form) -> Result<Response,Error> {
+        match self.client
             .post(&self.url)
             .multipart(form)
             .send()
-            .await
-            .unwrap()
+            .await {
+            Ok(resp) => Ok(resp),
+            Err(err) => Err(err)
+        }
     }
 
     pub async fn sne_get<T>(&self, params: Vec<(T, T)>) -> Response

@@ -1,9 +1,11 @@
-use crate::arrangement::api::{COOKIES_PATH, GET_LIVE_INFO};
-use reqwest::Client;
-use serde::{Deserialize, Serialize};
 use std::borrow::Cow;
 use std::fs::read_to_string;
 use std::time::{SystemTime, UNIX_EPOCH};
+
+use reqwest::{Client, Error};
+use serde::{Deserialize, Serialize};
+
+use crate::arrangement::api::{COOKIES_PATH, GET_LIVE_INFO};
 
 #[derive(Serialize, Deserialize)]
 pub struct CookiesConfig {
@@ -40,16 +42,20 @@ impl CookiesConfig {
         Cow::Owned(String::new())
     }
 
-    pub async fn anchor_id(room_id: u128) -> RoomInfo {
+    pub async fn anchor_id(room_id: u128) -> Result<RoomInfo,  Error> {
         let client = Client::new();
         let params = [("room_id", room_id)];
-        let room_info_resp = client
+        match client
             .get(GET_LIVE_INFO)
             .query(&params)
             .send()
-            .await
-            .unwrap();
-        serde_json::from_str::<RoomInfo>(&room_info_resp.text().await.unwrap()).unwrap()
+            .await {
+            Ok(room_info_resp) => {
+                Ok(serde_json::from_str::<RoomInfo>(&room_info_resp.text().await.unwrap()).unwrap())
+            }
+            Err(err) => Err(err)
+        }
+
     }
 
     pub fn rnd() -> u64 {

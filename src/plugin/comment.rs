@@ -5,7 +5,6 @@ use rand::thread_rng;
 use reqwest::multipart::Form;
 use serde::Deserialize;
 use std::sync::Arc;
-
 use crate::arrangement::config::Config;
 use crate::logged::load_cookies::CookiesConfig;
 use crate::util::utils::Utils;
@@ -58,7 +57,7 @@ impl Comment {
             .text("jumpfrom", self.config.jumpfrom.to_string())
             .text(
                 "replay_dmid",
-                self.config.replay_dmid.clone().unwrap_or_default(),
+                self.config.replay_dmid.to_owned().unwrap_or_default(),
             )
             .text("csrf", csrf.to_string())
             .text("csrf_token", csrf.to_string())
@@ -75,14 +74,21 @@ impl Comment {
     }
 
     pub async fn send(&self, form: Form) {
-        let result = self.utils.send_post(form).await.text().await.unwrap();
-        let comment_data = serde_json::from_str::<CommentData>(&result).unwrap();
-        if comment_data.code == 0 || comment_data.message.is_none() {
-            let content =
-                serde_json::from_str::<Extra>(&comment_data.data.mode_info.extra).unwrap();
-            info!("消息发送成功 {}", content.content)
-        } else {
-            warn!("消息发送失败 {}", comment_data.message.unwrap())
+        match self.utils.send_post(form).await {
+            Ok(response) => {
+                let result = response.text().await.unwrap();
+                let comment_data = serde_json::from_str::<CommentData>(&result).unwrap();
+                if comment_data.code == 0 || comment_data.message.is_none() {
+                    let content =
+                        serde_json::from_str::<Extra>(&comment_data.data.mode_info.extra).unwrap();
+                    info!("消息发送成功 {}", content.content)
+                } else {
+                    warn!("消息发送失败 {}", comment_data.message.unwrap())
+                }
+            }
+            Err(err) => {
+                warn!("{}" ,err.to_string())
+            }
         }
     }
 }

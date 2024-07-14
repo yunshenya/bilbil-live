@@ -2,7 +2,7 @@ use crate::plugin::comment::Comment;
 use crate::plugin::like::LikeSend;
 use crate::plugin::sign::{do_sign, live_add};
 use crate::plugin::video::FlashVideoWatch;
-use log::{info, warn};
+use log::{error, info, warn};
 use std::sync::Arc;
 use std::time::Duration;
 use tokio::time::sleep;
@@ -25,10 +25,13 @@ impl Task {
                             true
                         }
                         Err(err) => {
-                            warn!("点赞失败,错误码: {}", err);
+                            error!("点赞失败,错误码: {}", err);
+                            warn!("点赞已停止");
                             false
                         }
                     };
+                }else {
+                    break
                 }
             }
         })
