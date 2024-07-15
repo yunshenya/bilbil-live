@@ -13,5 +13,6 @@ mod util;
 async fn main() {
     init_log();
     Login::new().await;
-    Task::run().await
+    // Task::run().await;
+    Task::run_live().await.unwrap();
 }

@@ -70,7 +70,7 @@ impl Task {
             loop {
                 sleep(Duration::from_millis(5000)).await;
                 let form2 = comment2.build_form(None).await.unwrap_or_default();
-                warn!("{:?}", comment2.send(form2).await.err());
+                comment2.send(form2).await.err();
             }
         });
 

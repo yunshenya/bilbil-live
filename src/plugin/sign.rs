@@ -1,4 +1,4 @@
-use crate::arrangement::api::{ADD, DOSINGN};
+use crate::arrangement::api::{Add, DoSign};
 use crate::logged::load_cookies::CookiesConfig;
 use crate::util::utils::Utils;
 use log::{error, info, warn};
@@ -23,7 +23,7 @@ pub async fn live_add() {
         "application/x-www-form-urlencoded".parse().unwrap(),
     );
     let params = vec![("csrf", csrf)];
-    let utils = Utils::new(ADD).await;
+    let utils = Utils::new(Add::get_api()).await;
     match utils.post_with_form(params, headers).await {
         Ok(resp) => {
             let add = serde_json::from_str::<LiveAdd>(&resp.text().await.unwrap()).unwrap();
@@ -41,7 +41,7 @@ pub async fn live_add() {
 }
 
 pub async fn do_sign() {
-    let util = Utils::new(DOSINGN).await;
+    let util = Utils::new(DoSign::get_api()).await;
     match util.send_get().await {
         Ok(resp) => {
             let do_sign_json =

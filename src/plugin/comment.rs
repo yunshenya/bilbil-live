@@ -1,4 +1,4 @@
-use crate::arrangement::api::COMMENT_SEND_URL;
+use crate::arrangement::api::CommentSendUrl;
 use crate::arrangement::config::Config;
 use crate::logged::load_cookies::CookiesConfig;
 use crate::util::error::BilCoreResult;
@@ -37,7 +37,7 @@ struct CommentData {
 
 impl Comment {
     pub async fn new() -> Self {
-        let utils = Utils::new(COMMENT_SEND_URL).await;
+        let utils = Utils::new(CommentSendUrl::get_api()).await;
         let config = Arc::new(Config::new().await);
         Self { utils, config }
     }

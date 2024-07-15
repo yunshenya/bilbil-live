@@ -1,7 +1,7 @@
 use reqwest::multipart::Form;
 use serde::Deserialize;
 
-use crate::arrangement::api::SEND_LIKE_URL;
+use crate::arrangement::api::SendLikeUrl;
 use crate::arrangement::config::Config;
 use crate::logged::load_cookies::CookiesConfig;
 use crate::util::error::{BilCoreResult, BilError};
@@ -16,7 +16,7 @@ struct LikeResult {
 
 impl LikeSend {
     pub async fn new() -> BilCoreResult<Self> {
-        let utils = Utils::new(SEND_LIKE_URL).await;
+        let utils = Utils::new(SendLikeUrl::get_api()).await;
         let config = Config::new().await;
         let load_config = CookiesConfig::default();
         let csrf = CookiesConfig::csrf();

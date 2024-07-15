@@ -1,4 +1,4 @@
-use crate::arrangement::api::{COOKIES_PATH, GET_ACCOUNT, GET_CODE_URL, SCAN_INFO};
+use crate::arrangement::api::{COOKIES_PATH, GetAccount, GetCodeUrl, ScanInfo};
 use crate::logged::load_cookies::CookiesConfig;
 use log::{error, info, warn};
 use qrcode::render::unicode;
@@ -93,7 +93,7 @@ impl Login {
 
     async fn qrcode() {
         let client = Client::new();
-        match client.get(GET_CODE_URL).send().await {
+        match client.get(GetCodeUrl::get_api()).send().await {
             Ok(qr_response) => {
                 let qrcode: Qrcode =
                     serde_json::from_str(&qr_response.text().await.unwrap()).unwrap();
@@ -104,7 +104,7 @@ impl Login {
                 let mut is_confirmed_first = true;
                 loop {
                     let params = [("qrcode_key", &qrcode.data.qrcode_key)];
-                    let is_scan = client.get(SCAN_INFO).query(&params).send().await.unwrap();
+                    let is_scan = client.get(ScanInfo::get_api()).query(&params).send().await.unwrap();
                     let (cookie, text) = (
                         is_scan
                             .cookies()
@@ -130,7 +130,7 @@ impl Login {
                                 .join("; ");
                             let cookies = format!("{}; {}", cookies_str, cookie);
                             let account_resp = client
-                                .get(GET_ACCOUNT)
+                                .get(GetAccount::get_api())
                                 .header(COOKIE, &cookies)
                                 .send()
                                 .await

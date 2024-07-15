@@ -1,7 +1,9 @@
-use crate::arrangement::api::{JUDGE, NAV, VIDEO_INFO};
-use crate::util::utils::Utils;
-use serde::Deserialize;
 use std::process::Command;
+
+use serde::Deserialize;
+
+use crate::arrangement::api::{Judge, Nav, VideoInfo};
+use crate::util::utils::Utils;
 
 #[derive(Deserialize)]
 struct VideoJson {
@@ -61,7 +63,7 @@ impl FlashVideoWatch {
     }
 
     async fn get_video_info(bvid: &str) {
-        let util = Utils::new(VIDEO_INFO).await;
+        let util = Utils::new(VideoInfo::get_api()).await;
         let params = vec![("bvid", bvid)];
         let response = util.sne_get(params).await;
         let video_json =
@@ -81,7 +83,7 @@ impl FlashVideoWatch {
     }
 
     async fn nav(bvid: &str, cid: &str, up_mid: &str) {
-        let util = Utils::new(NAV).await;
+        let util = Utils::new(Nav::get_api()).await;
         let result = util.send_get().await.unwrap();
         let json = serde_json::from_str::<WbiImgJson>(&result.text().await.unwrap()).unwrap();
         let imgkey = json
@@ -110,7 +112,7 @@ impl FlashVideoWatch {
                 let resp_key = serde_json::from_str::<RespKey>(&string).unwrap();
                 let wts = &*resp_key.wts.to_string();
                 let w_rid = &*resp_key.w_rid.to_string();
-                let utils_nav = Utils::new(JUDGE).await;
+                let utils_nav = Utils::new(Judge::get_api()).await;
                 let params = vec![
                     ("bvid", bvid),
                     ("cid", cid),
