@@ -46,17 +46,13 @@ impl CookiesConfig {
     pub async fn anchor_id(room_id: u128) -> BilCoreResult<RoomInfo> {
         let client = Client::new();
         let params = [("room_id", room_id)];
-        match client
-            .get(GET_LIVE_INFO)
-            .query(&params)
-            .send()
-            .await {
-            Ok(room_info_resp) => {
-                Ok(serde_json::from_str::<RoomInfo>(&room_info_resp.text().await.unwrap()).unwrap())
-            }
-            Err(err) => Err(BilError::from(err))
+        match client.get(GET_LIVE_INFO).query(&params).send().await {
+            Ok(room_info_resp) => Ok(serde_json::from_str::<RoomInfo>(
+                &room_info_resp.text().await.unwrap(),
+            )
+            .unwrap()),
+            Err(err) => Err(BilError::from(err)),
         }
-
     }
 
     pub fn rnd() -> u64 {

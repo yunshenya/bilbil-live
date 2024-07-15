@@ -42,10 +42,10 @@ impl LikeSend {
                 if data_code.code == 0 {
                     Ok(Self)
                 } else {
-                    Err(BilError::ParamsError(String::from("字符串错误")))
+                    Err(BilError::Params(String::from("字符串错误")))
                 }
             }
-            Err(err) => Err(BilError::from(err))
+            Err(err) => Err(BilError::from(err)),
         }
     }
 }

@@ -4,6 +4,7 @@ use reqwest::{Client, Error, Response};
 use serde::Serialize;
 
 use crate::logged::load_cookies::CookiesConfig;
+use crate::util::error::BilCoreResult;
 
 pub struct Utils {
     url: String,
@@ -23,14 +24,10 @@ impl Utils {
         }
     }
 
-    pub async fn send_post(&self, form: Form) -> Result<Response,Error> {
-        match self.client
-            .post(&self.url)
-            .multipart(form)
-            .send()
-            .await {
+    pub async fn send_post(&self, form: Form) -> Result<Response, Error> {
+        match self.client.post(&self.url).multipart(form).send().await {
             Ok(resp) => Ok(resp),
-            Err(err) => Err(err)
+            Err(err) => Err(err),
         }
     }
 
@@ -50,27 +47,20 @@ impl Utils {
         &self,
         params: Vec<(T, T)>,
         headers: HeaderMap,
-    ) -> Result<Response, String>
+    ) -> BilCoreResult<Response>
     where
         T: Serialize,
     {
-        match self
+        Ok(self
             .client
             .post(&self.url)
             .headers(headers)
             .form(&params)
             .send()
-            .await
-        {
-            Ok(res) => Ok(res),
-            Err(err) => Err(err.to_string()),
-        }
+            .await?)
     }
 
-    pub async fn send_get(&self) -> Result<Response, Error> {
-        match self.client.get(&self.url).send().await {
-            Ok(resp) => Ok(resp),
-            Err(err) => Err(err),
-        }
+    pub async fn send_get(&self) -> BilCoreResult<Response> {
+        Ok(self.client.get(&self.url).send().await?)
     }
 }
