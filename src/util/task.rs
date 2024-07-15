@@ -1,6 +1,6 @@
+use std::io::{stdin, stdout, Write};
 use crate::plugin::comment::Comment;
 use crate::plugin::like::LikeSend;
-use crate::plugin::sign::{do_sign, live_add};
 use crate::plugin::video::FlashVideoWatch;
 use crate::util::error::BilCoreResult;
 use log::{error, info, warn};
@@ -13,8 +13,6 @@ pub struct Task;
 
 impl Task {
     pub async fn run() {
-        live_add().await;
-        do_sign().await;
         task::spawn(async {
             let mut is_like = true;
             loop {
@@ -32,7 +30,16 @@ impl Task {
                         }
                     };
                 } else {
-                    break;
+                    print!("是否继续: ");
+                    stdout().flush().unwrap();
+                    let mut para_str = String::new();
+                    stdin().read_line(&mut para_str).unwrap();
+                    if para_str.trim().eq("y") {
+                        is_like = true;
+                    }else {
+                        warn!("点赞任务结束");
+                        break;
+                    }
                 }
             }
         })
