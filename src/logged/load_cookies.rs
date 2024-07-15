@@ -2,10 +2,11 @@ use std::borrow::Cow;
 use std::fs::read_to_string;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use reqwest::{Client, Error};
+use reqwest::Client;
 use serde::{Deserialize, Serialize};
 
 use crate::arrangement::api::{COOKIES_PATH, GET_LIVE_INFO};
+use crate::util::error::{BilCoreResult, BilError};
 
 #[derive(Serialize, Deserialize)]
 pub struct CookiesConfig {
@@ -42,7 +43,7 @@ impl CookiesConfig {
         Cow::Owned(String::new())
     }
 
-    pub async fn anchor_id(room_id: u128) -> Result<RoomInfo,  Error> {
+    pub async fn anchor_id(room_id: u128) -> BilCoreResult<RoomInfo> {
         let client = Client::new();
         let params = [("room_id", room_id)];
         match client
@@ -53,7 +54,7 @@ impl CookiesConfig {
             Ok(room_info_resp) => {
                 Ok(serde_json::from_str::<RoomInfo>(&room_info_resp.text().await.unwrap()).unwrap())
             }
-            Err(err) => Err(err)
+            Err(err) => Err(BilError::from(err))
         }
 
     }

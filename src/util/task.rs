@@ -25,7 +25,7 @@ impl Task {
                             true
                         }
                         Err(err) => {
-                            error!("点赞失败,错误码: {}", err);
+                            error!("点赞失败, {}", err);
                             warn!("点赞已停止");
                             false
                         }

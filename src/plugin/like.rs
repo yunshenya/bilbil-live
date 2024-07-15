@@ -4,6 +4,7 @@ use serde::Deserialize;
 use crate::arrangement::api::SEND_LIKE_URL;
 use crate::arrangement::config::Config;
 use crate::logged::load_cookies::CookiesConfig;
+use crate::util::error::{BilCoreResult, BilError};
 use crate::util::utils::Utils;
 
 pub struct LikeSend;
@@ -14,7 +15,7 @@ struct LikeResult {
 }
 
 impl LikeSend {
-    pub async fn new() -> Result<Self, String> {
+    pub async fn new() -> BilCoreResult<Self> {
         let utils = Utils::new(SEND_LIKE_URL).await;
         let config = Config::new().await;
         let load_config = CookiesConfig::default();
@@ -26,7 +27,7 @@ impl LikeSend {
             .text(
                 "anchor_id",
                 CookiesConfig::anchor_id(config.room_id)
-                    .await.unwrap()
+                    .await?
                     .data
                     .uid
                     .to_string(),
@@ -37,14 +38,14 @@ impl LikeSend {
 
         match utils.send_post(form).await {
             Ok(result) => {
-                let data_code = serde_json::from_str::<LikeResult>(&result.text().await.unwrap()).unwrap();
+                let data_code = serde_json::from_str::<LikeResult>(&result.text().await?)?;
                 if data_code.code == 0 {
                     Ok(Self)
                 } else {
-                    Err(data_code.code.to_string())
+                    Err(BilError::ParamsError(String::from("字符串错误")))
                 }
             }
-            Err(err) => Err(err.to_string())
+            Err(err) => Err(BilError::from(err))
         }
     }
 }
