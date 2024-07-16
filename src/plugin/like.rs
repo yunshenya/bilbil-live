@@ -45,7 +45,7 @@ impl LikeSend {
                     Err(BilError::Params(String::from("字符串错误")))
                 }
             }
-            Err(err) => Err(BilError::from(err)),
+            Err(err) => Err(err),
         }
     }
 }
