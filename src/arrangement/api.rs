@@ -18,19 +18,18 @@ pub struct Judge;
 #[api(endpoint("https://passport.bilibili.com/x/passport-login/web/qrcode/generate"))]
 pub struct GetCodeUrl;
 
-
 #[derive(Api)]
 #[api(endpoint("https://passport.bilibili.com/x/passport-login/web/qrcode/poll"))]
 pub struct ScanInfo;
-
 
 #[derive(Api)]
 #[api(endpoint("https://api.live.bilibili.com/msg/send"))]
 pub struct CommentSendUrl;
 
-
 #[derive(Api)]
-#[api(endpoint("https://api.live.bilibili.com/xlive/app-ucenter/v1/like_info_v3/like/likeReportV3"))]
+#[api(endpoint(
+    "https://api.live.bilibili.com/xlive/app-ucenter/v1/like_info_v3/like/likeReportV3"
+))]
 pub struct SendLikeUrl;
 
 #[derive(Api)]
@@ -40,7 +39,6 @@ pub struct GetAccount;
 #[derive(Api)]
 #[api(endpoint("https://api.live.bilibili.com/room/v1/Room/get_info"))]
 pub struct GetLiveInfo;
-
 
 #[derive(Api)]
 #[api(endpoint("https://api.bilibili.com/x/vip/experience/add"))]

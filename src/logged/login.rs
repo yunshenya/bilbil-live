@@ -1,4 +1,4 @@
-use crate::arrangement::api::{COOKIES_PATH, GetAccount, GetCodeUrl, ScanInfo};
+use crate::arrangement::api::{GetAccount, GetCodeUrl, ScanInfo, COOKIES_PATH};
 use crate::logged::load_cookies::CookiesConfig;
 use log::{error, info, warn};
 use qrcode::render::unicode;
@@ -104,7 +104,12 @@ impl Login {
                 let mut is_confirmed_first = true;
                 loop {
                     let params = [("qrcode_key", &qrcode.data.qrcode_key)];
-                    let is_scan = client.get(ScanInfo::get_api()).query(&params).send().await.unwrap();
+                    let is_scan = client
+                        .get(ScanInfo::get_api())
+                        .query(&params)
+                        .send()
+                        .await
+                        .unwrap();
                     let (cookie, text) = (
                         is_scan
                             .cookies()

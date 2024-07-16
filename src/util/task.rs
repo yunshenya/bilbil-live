@@ -1,9 +1,9 @@
-use std::io::{stdin, stdout, Write};
 use crate::plugin::comment::Comment;
 use crate::plugin::like::LikeSend;
 use crate::plugin::video::FlashVideoWatch;
 use crate::util::error::BilCoreResult;
 use log::{error, info, warn};
+use std::io::{stdin, stdout, Write};
 use std::sync::Arc;
 use std::time::Duration;
 use tokio::time::sleep;
@@ -36,7 +36,7 @@ impl Task {
                     stdin().read_line(&mut para_str).unwrap();
                     if para_str.trim().eq("y") {
                         is_like = true;
-                    }else {
+                    } else {
                         warn!("点赞任务结束");
                         break;
                     }

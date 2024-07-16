@@ -5,7 +5,7 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
 
-use crate::arrangement::api::{COOKIES_PATH, GetLiveInfo};
+use crate::arrangement::api::{GetLiveInfo, COOKIES_PATH};
 use crate::util::error::{BilCoreResult, BilError};
 
 #[derive(Serialize, Deserialize)]
@@ -46,7 +46,12 @@ impl CookiesConfig {
     pub async fn anchor_id(room_id: u128) -> BilCoreResult<RoomInfo> {
         let client = Client::new();
         let params = [("room_id", room_id)];
-        match client.get(GetLiveInfo::get_api()).query(&params).send().await {
+        match client
+            .get(GetLiveInfo::get_api())
+            .query(&params)
+            .send()
+            .await
+        {
             Ok(room_info_resp) => Ok(serde_json::from_str::<RoomInfo>(
                 &room_info_resp.text().await.unwrap(),
             )
