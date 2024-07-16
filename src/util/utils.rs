@@ -1,6 +1,6 @@
-use reqwest::header::{HeaderMap, COOKIE, USER_AGENT};
+use reqwest::{Client, Response};
+use reqwest::header::{COOKIE, HeaderMap, USER_AGENT};
 use reqwest::multipart::Form;
-use reqwest::{Client, Error, Response};
 use serde::Serialize;
 
 use crate::logged::load_cookies::CookiesConfig;
@@ -24,23 +24,19 @@ impl Utils {
         }
     }
 
-    pub async fn send_post(&self, form: Form) -> Result<Response, Error> {
-        match self.client.post(&self.url).multipart(form).send().await {
-            Ok(resp) => Ok(resp),
-            Err(err) => Err(err),
-        }
+    pub async fn send_post(&self, form: Form) -> BilCoreResult<Response> {
+        Ok(self.client.post(&self.url).multipart(form).send().await?)
     }
 
-    pub async fn sne_get<T>(&self, params: Vec<(T, T)>) -> Response
+    pub async fn sne_get<T>(&self, params: Vec<(T, T)>) -> BilCoreResult<Response>
     where
         T: Serialize,
     {
-        self.client
+        Ok(self.client
             .get(&self.url)
             .query(&params)
             .send()
-            .await
-            .unwrap()
+            .await?)
     }
 
     pub async fn post_with_form<T>(

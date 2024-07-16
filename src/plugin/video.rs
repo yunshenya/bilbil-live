@@ -65,7 +65,7 @@ impl FlashVideoWatch {
     async fn get_video_info(bvid: &str) {
         let util = Utils::new(VideoInfo::get_api()).await;
         let params = vec![("bvid", bvid)];
-        let response = util.sne_get(params).await;
+        let response = util.sne_get(params).await.unwrap();
         let video_json =
             serde_json::from_str::<VideoJson>(&response.text().await.unwrap()).unwrap();
         println!("投币量为: {:?}", video_json.data.stat.coin);
@@ -121,7 +121,7 @@ impl FlashVideoWatch {
                     ("w_rid", w_rid),
                     ("wts", wts),
                 ];
-                let response = utils_nav.sne_get(params).await;
+                let response = utils_nav.sne_get(params).await.unwrap();
                 println!("{}", response.text().await.unwrap());
             }
             Err(_) => {
