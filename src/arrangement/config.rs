@@ -4,7 +4,6 @@ use serde::{Deserialize, Serialize};
 use std::fs::{read_to_string, OpenOptions};
 use std::io::{stdin, stdout, Write};
 use std::path::Path;
-use std::sync::Arc;
 use tokio::sync::Mutex;
 
 #[derive(Serialize, Deserialize)]
@@ -45,7 +44,7 @@ pub struct Config {
     pub mode: String,
     pub room_type: i32,
     pub jumpfrom: i32,
-    pub replay_dmid: Arc<Mutex<Option<String>>>,
+    pub replay_dmid: Mutex<Option<String>>,
     pub statistics: Statistics,
     pub click_time: i32,
     pub visit_id: Option<String>,
@@ -63,7 +62,7 @@ impl Config {
                 color: loader.room.color,
                 room_type: loader.room.room_type,
                 jumpfrom: loader.room.jumpfrom,
-                replay_dmid: Arc::new(Mutex::new(loader.room.replay_dmid)),
+                replay_dmid: Mutex::new(loader.room.replay_dmid),
                 statistics: loader.room.statistics,
                 click_time: loader.room.click_time,
                 visit_id: loader.room.visit_id,
@@ -86,7 +85,7 @@ impl Config {
                 mode: loader.room.mode,
                 room_type: loader.room.room_type,
                 jumpfrom: loader.room.jumpfrom,
-                replay_dmid: Arc::new(Mutex::new(loader.room.replay_dmid)),
+                replay_dmid: Mutex::new(loader.room.replay_dmid),
                 statistics: loader.room.statistics,
                 click_time: loader.room.click_time,
                 visit_id: loader.room.visit_id,
