@@ -14,6 +14,7 @@ impl Task {
     pub async fn run(){
         let task = task::spawn(async {
             info!("点赞开始...");
+            let mut count  = 0;
             loop {
                 sleep(Duration::from_millis(1000)).await;
                 match LikeSend::new().await {
@@ -21,8 +22,14 @@ impl Task {
                         continue
                     }
                     Err(err) => {
-                        warn!("{}" ,err);
-                        info!("点赞继续")
+                        count += 1;
+                        if count < 10 {
+                            warn!("{}" ,err);
+                            info!("点赞继续, 第{count}次错误")
+                        }else {
+                            warn!("以重试{count}次, 点赞暂停");
+                            break
+                        }
                     }
                 };
             }
