@@ -2,7 +2,6 @@ use proc_macro::TokenStream;
 use quote::quote;
 use syn::{parenthesized, parse_macro_input, DeriveInput, LitStr};
 
-
 pub(crate) fn derive_api(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as DeriveInput);
     let struct_name = input.ident;

@@ -3,6 +3,7 @@ use std::process::Command;
 use serde::Deserialize;
 
 use crate::arrangement::api::{Judge, Nav, VideoInfo};
+use crate::util::error::{BilCoreResult, BilError};
 use crate::util::utils::Utils;
 
 #[derive(Deserialize)]
@@ -79,13 +80,15 @@ impl FlashVideoWatch {
         println!("用户名: {}", video_json.data.owner.name);
         println!("mid: {}", video_json.data.owner.mid);
         let up_mid = &*video_json.data.owner.mid.to_string();
-        FlashVideoWatch::nav(bvid, cid, up_mid).await;
+        FlashVideoWatch::nav(bvid, cid, up_mid)
+            .await
+            .expect("请求发送失败");
     }
 
-    async fn nav(bvid: &str, cid: &str, up_mid: &str) {
+    async fn nav(bvid: &str, cid: &str, up_mid: &str) -> BilCoreResult<()> {
         let util = Utils::new(Nav::get_api()).await;
-        let result = util.send_get().await.unwrap();
-        let json = serde_json::from_str::<WbiImgJson>(&result.text().await.unwrap()).unwrap();
+        let result = util.send_get().await?;
+        let json = serde_json::from_str::<WbiImgJson>(&result.text().await?)?;
         let imgkey = json
             .data
             .wbi_img
@@ -93,7 +96,7 @@ impl FlashVideoWatch {
             .trim_end_matches(".png")
             .split("/")
             .last()
-            .unwrap();
+            .unwrap_or_default();
         let subkey = json
             .data
             .wbi_img
@@ -109,7 +112,7 @@ impl FlashVideoWatch {
             Ok(rep) => {
                 let str = rep.stdout;
                 let string = String::from_utf8(str).unwrap();
-                let resp_key = serde_json::from_str::<RespKey>(&string).unwrap();
+                let resp_key = serde_json::from_str::<RespKey>(&string)?;
                 let wts = &*resp_key.wts.to_string();
                 let w_rid = &*resp_key.w_rid.to_string();
                 let utils_nav = Utils::new(Judge::get_api()).await;
@@ -121,12 +124,11 @@ impl FlashVideoWatch {
                     ("w_rid", w_rid),
                     ("wts", wts),
                 ];
-                let response = utils_nav.sne_get(params).await.unwrap();
-                println!("{}", response.text().await.unwrap());
+                let response = utils_nav.sne_get(params).await?;
+                println!("{}", response.text().await.unwrap_or_default());
+                Ok(())
             }
-            Err(_) => {
-                println!("出错了")
-            }
+            Err(err) => Err(BilError::from(err)),
         }
     }
 }

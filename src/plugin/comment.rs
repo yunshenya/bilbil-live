@@ -58,7 +58,11 @@ impl Comment {
             .text("jumpfrom", self.config.jumpfrom.to_string())
             .text(
                 "replay_dmid",
-                Arc::clone(&self.config.replay_dmid).lock().await.take().unwrap_or_default(),
+                Arc::clone(&self.config.replay_dmid)
+                    .lock()
+                    .await
+                    .take()
+                    .unwrap_or_default(),
             )
             .text("csrf", csrf.to_string())
             .text("csrf_token", csrf.to_string())

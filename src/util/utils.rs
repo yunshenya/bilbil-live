@@ -1,6 +1,6 @@
-use reqwest::{Client, Response};
-use reqwest::header::{COOKIE, HeaderMap, USER_AGENT};
+use reqwest::header::{HeaderMap, COOKIE, USER_AGENT};
 use reqwest::multipart::Form;
+use reqwest::{Client, Response};
 use serde::Serialize;
 
 use crate::logged::load_cookies::CookiesConfig;
@@ -32,11 +32,7 @@ impl Utils {
     where
         T: Serialize,
     {
-        Ok(self.client
-            .get(&self.url)
-            .query(&params)
-            .send()
-            .await?)
+        Ok(self.client.get(&self.url).query(&params).send().await?)
     }
 
     pub async fn post_with_form<T>(

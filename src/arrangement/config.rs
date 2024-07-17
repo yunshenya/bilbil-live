@@ -1,11 +1,11 @@
+use crate::arrangement::api::CONFIG_PATH;
 use log::info;
+use serde::{Deserialize, Serialize};
 use std::fs::{read_to_string, OpenOptions};
 use std::io::{stdin, stdout, Write};
 use std::path::Path;
 use std::sync::Arc;
-use serde::{Deserialize, Serialize};
 use tokio::sync::Mutex;
-use crate::arrangement::api::CONFIG_PATH;
 
 #[derive(Serialize, Deserialize)]
 struct Loader {
