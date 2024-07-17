@@ -2,8 +2,7 @@ use crate::plugin::comment::Comment;
 use crate::plugin::like::LikeSend;
 use crate::plugin::video::FlashVideoWatch;
 use crate::util::error::BilCoreResult;
-use log::{error, info, warn};
-use std::io::{stdin, stdout, Write};
+use log::{info, warn};
 use std::sync::Arc;
 use std::time::Duration;
 use tokio::time::sleep;
@@ -12,39 +11,23 @@ use tokio::{join, task};
 pub struct Task;
 
 impl Task {
-    pub async fn run() {
-        task::spawn(async {
-            let mut is_like = true;
+    pub async fn run(){
+        let task = task::spawn(async {
+            info!("点赞开始...");
             loop {
                 sleep(Duration::from_millis(1000)).await;
-                if is_like {
-                    is_like = match LikeSend::new().await {
-                        Ok(_) => {
-                            info!("点赞成功");
-                            true
-                        }
-                        Err(err) => {
-                            error!("点赞失败, {}", err);
-                            warn!("点赞已停止");
-                            false
-                        }
-                    };
-                } else {
-                    print!("是否继续: ");
-                    stdout().flush().unwrap();
-                    let mut para_str = String::new();
-                    stdin().read_line(&mut para_str).unwrap();
-                    if para_str.trim().eq("y") {
-                        is_like = true;
-                    } else {
-                        warn!("点赞任务结束");
-                        break;
+                match LikeSend::new().await {
+                    Ok(_) => {
+                        continue
                     }
-                }
+                    Err(err) => {
+                        warn!("{}" ,err);
+                        info!("点赞继续")
+                    }
+                };
             }
-        })
-        .await
-        .expect("点赞任务执行失败");
+        });
+        task.await.unwrap();
     }
 
     pub async fn run_live() -> BilCoreResult<()> {

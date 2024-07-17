@@ -21,7 +21,7 @@ impl Log for BilLog {
             match record.level() {
                 Error => {
                     println!(
-                        "{} [{}] | {} | {}",
+                        "[{}] [{}] ({}) {}",
                         Red.paint(now.to_string()),
                         Red.paint("杂鱼"),
                         app_name,
@@ -30,7 +30,7 @@ impl Log for BilLog {
                 }
                 Level::Warn => {
                     println!(
-                        "{} [{}] | {} | {}",
+                        "[{}] [{}] ({}) {}",
                         Yellow.paint(now.to_string()),
                         Yellow.paint("笨蛋"),
                         app_name,
@@ -39,7 +39,7 @@ impl Log for BilLog {
                 }
                 Info => {
                     println!(
-                        "{} [{}] | {} | {}",
+                        "[{}] [{}] ({}) {}",
                         Purple.paint(now.to_string()),
                         Blue.paint("摸鱼"),
                         app_name,
@@ -48,7 +48,7 @@ impl Log for BilLog {
                 }
                 Debug => {
                     println!(
-                        "{} [{}] | {} | {}",
+                        "[{}] [{}] ({}) {}",
                         Blue.paint(now.to_string()),
                         Yellow.paint("雌小鬼"),
                         app_name,
@@ -57,7 +57,7 @@ impl Log for BilLog {
                 }
                 Level::Trace => {
                     println!(
-                        "{} [{}] | {} | {}",
+                        "[{}] [{}] ({}) {}",
                         now,
                         Blue.paint("未知"),
                         app_name,
