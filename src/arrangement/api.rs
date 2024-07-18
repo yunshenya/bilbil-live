@@ -1,19 +1,19 @@
-use bil_derive::Api;
 use crate::arrangement::config::Config;
 use crate::logged::load_cookies::CookiesConfig;
+use bil_derive::Api;
 
-pub trait PathInfo{
+pub trait PathInfo {
     const PATH: &'static str;
 }
 
-impl PathInfo for CookiesConfig{
+impl PathInfo for CookiesConfig {
     #[cfg(test)]
     const PATH: &'static str = concat!(env!("OUT_DIR"), "config/cookies.yaml");
     #[cfg(not(test))]
     const PATH: &'static str = "config/cookies.yaml";
 }
 
-impl PathInfo for Config{
+impl PathInfo for Config {
     #[cfg(test)]
     const PATH: &'static str = concat!(env!("OUT_DIR"), "config/config.yaml");
     #[cfg(not(test))]

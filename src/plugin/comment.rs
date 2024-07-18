@@ -58,7 +58,8 @@ impl Comment {
             .text("jumpfrom", self.config.jumpfrom.to_string())
             .text(
                 "replay_dmid",
-                self.config.replay_dmid
+                self.config
+                    .replay_dmid
                     .lock()
                     .await
                     .take()

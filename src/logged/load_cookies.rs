@@ -53,9 +53,8 @@ impl CookiesConfig {
             .await
         {
             Ok(room_info_resp) => Ok(serde_json::from_str::<RoomInfo>(
-                &room_info_resp.text().await.unwrap(),
-            )
-            .unwrap()),
+                &room_info_resp.text().await?,
+            )?),
             Err(err) => Err(BilError::from(err)),
         }
     }

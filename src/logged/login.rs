@@ -1,4 +1,4 @@
-use crate::arrangement::api::{GetAccount, GetCodeUrl, ScanInfo,PathInfo};
+use crate::arrangement::api::{GetAccount, GetCodeUrl, PathInfo, ScanInfo};
 use crate::logged::load_cookies::CookiesConfig;
 use log::{error, info, warn};
 use qrcode::render::unicode;
