@@ -1,5 +1,3 @@
-#![feature(duration_constructors)]
-
 use crate::arrangement::bil_log::init_log;
 use crate::logged::login::Login;
 use crate::plugin::sign::{do_sign, live_add};
@@ -17,5 +15,5 @@ async fn main() {
     live_add().await;
     do_sign().await;
     Task::run().await;
-    // Task::run_live().await.unwrap();
+    Task::run_live().await.unwrap();
 }
