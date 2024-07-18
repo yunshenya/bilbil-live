@@ -1,7 +1,24 @@
 use bil_derive::Api;
+use crate::arrangement::config::Config;
+use crate::logged::load_cookies::CookiesConfig;
 
-pub const COOKIES_PATH: &str = "config/cookies.yaml";
-pub const CONFIG_PATH: &str = "config/config.yaml";
+pub trait PathInfo{
+    const PATH: &'static str;
+}
+
+impl PathInfo for CookiesConfig{
+    #[cfg(test)]
+    const PATH: &'static str = concat!(env!("OUT_DIR"), "config/cookies.yaml");
+    #[cfg(not(test))]
+    const PATH: &'static str = "config/cookies.yaml";
+}
+
+impl PathInfo for Config{
+    #[cfg(test)]
+    const PATH: &'static str = concat!(env!("OUT_DIR"), "config/config.yaml");
+    #[cfg(not(test))]
+    const PATH: &'static str = "config/config.yaml";
+}
 
 #[derive(Api)]
 #[api(endpoint("https://api.live.bilibili.com/xlive/web-ucenter/v1/sign/DoSign"))]

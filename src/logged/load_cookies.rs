@@ -5,7 +5,7 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
 
-use crate::arrangement::api::{GetLiveInfo, COOKIES_PATH};
+use crate::arrangement::api::{GetLiveInfo, PathInfo};
 use crate::util::error::{BilCoreResult, BilError};
 
 #[derive(Serialize, Deserialize)]
@@ -71,7 +71,7 @@ impl CookiesConfig {
 
 impl Default for CookiesConfig {
     fn default() -> Self {
-        let cookies_str = read_to_string(COOKIES_PATH).unwrap();
+        let cookies_str = read_to_string(Self::PATH).unwrap();
         let cookies = serde_yaml::from_str::<CookiesConfig>(&cookies_str).unwrap();
         Self {
             refresh_token: cookies.refresh_token,

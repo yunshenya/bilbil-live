@@ -1,4 +1,4 @@
-use crate::arrangement::api::{GetAccount, GetCodeUrl, ScanInfo, COOKIES_PATH};
+use crate::arrangement::api::{GetAccount, GetCodeUrl, ScanInfo,PathInfo};
 use crate::logged::load_cookies::CookiesConfig;
 use log::{error, info, warn};
 use qrcode::render::unicode;
@@ -72,7 +72,7 @@ impl From<i32> for Statue {
 
 impl Login {
     pub async fn new() -> Self {
-        let path = Path::new(COOKIES_PATH);
+        let path = Path::new(CookiesConfig::PATH);
         if path.exists() {
             let config = CookiesConfig::default();
             if config.is_login {
@@ -83,7 +83,7 @@ impl Login {
                 Self
             }
         } else {
-            let dir = COOKIES_PATH.split("/").next().unwrap();
+            let dir = path.to_str().unwrap().split("/").next().unwrap();
             create_dir_all(dir).unwrap();
             info!("创建cookie文件: {}", dir);
             Login::qrcode().await;
@@ -153,7 +153,7 @@ impl Login {
                                 .create(true)
                                 .write(true)
                                 .truncate(true)
-                                .open(COOKIES_PATH)
+                                .open(CookiesConfig::PATH)
                                 .unwrap();
                             file.write_all(config_str.as_bytes()).unwrap();
                             info!("用户名: {} 签名: {}", account.data.uname, account.data.sign);

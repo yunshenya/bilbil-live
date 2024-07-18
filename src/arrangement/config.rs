@@ -1,4 +1,4 @@
-use crate::arrangement::api::CONFIG_PATH;
+use crate::arrangement::api::PathInfo;
 use log::info;
 use serde::{Deserialize, Serialize};
 use std::fs::{read_to_string, OpenOptions};
@@ -52,9 +52,9 @@ pub struct Config {
 
 impl Config {
     pub async fn new() -> Self {
-        let path = Path::new(CONFIG_PATH);
+        let path = Path::new(Self::PATH);
         if path.exists() {
-            let yaml_str = read_to_string(CONFIG_PATH).unwrap();
+            let yaml_str = read_to_string(Self::PATH).unwrap();
             let loader = serde_yaml::from_str::<Loader>(&yaml_str).unwrap();
             Self {
                 room_id: loader.room.room_id,
@@ -75,7 +75,7 @@ impl Config {
                 .create(true)
                 .write(true)
                 .truncate(true)
-                .open(CONFIG_PATH)
+                .open(Self::PATH)
                 .unwrap();
             file.write_all(serialized.as_bytes()).unwrap();
             Config {
