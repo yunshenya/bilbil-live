@@ -1,3 +1,4 @@
+use std::io::{stdout, Write};
 use crate::plugin::comment::Comment;
 use crate::plugin::like::LikeSend;
 use crate::plugin::video::FlashVideoWatch;
@@ -5,6 +6,10 @@ use crate::util::error::BilCoreResult;
 use log::{info, warn};
 use std::sync::Arc;
 use std::time::Duration;
+use ansi_term::Color::{Blue, Purple};
+use ansi_term::{Colour, Style};
+use ansi_term::Colour::Red;
+use chrono::Local;
 use tokio::time::{sleep, interval};
 use tokio::{self, join, task};
 
@@ -15,7 +20,7 @@ impl Task {
         let mut count = 0;
         let retry_limit = 10;
         let mut interval = interval(Duration::from_millis(1000));
-
+        let mut like_count = 0;
         info!("点赞开始...");
         loop {
             interval.tick().await;
@@ -29,7 +34,13 @@ impl Task {
                     info!("第{count}次错误，将继续尝试...");
                 }
             } else {
-                // 成功时无需操作，直接进入下一次循环
+                let fmt = "%Y年%m月%d日 %H:%M:%S";
+                let now = Local::now().format(fmt);
+                let pink = Colour::RGB(255, 192, 203); //粉色
+                let app_name = Style::new().fg(pink).paint("bilbil-live");
+                like_count += 1;
+                stdout().flush().unwrap();
+                print!("\r[{}] [{}] ({}): {}", Purple.paint(now.to_string()), Blue.paint("点赞中..."), app_name,Red.paint(like_count.to_string()));
                 continue
             }
         }
