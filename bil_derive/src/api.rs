@@ -25,6 +25,7 @@ pub(crate) fn derive_api(input: TokenStream) -> TokenStream {
     };
     let expanded = quote! {
         impl #struct_name {
+            #[inline]
             pub fn get_api() -> &'static str {
                 #endpoint
             }
