@@ -40,7 +40,7 @@ impl Task {
                 let app_name = Style::new().fg(pink).paint("bilbil-live");
                 like_count += 1;
                 stdout().flush().unwrap();
-                print!("\r[{}] [{}] ({}): {}", Purple.paint(now.to_string()), Blue.paint("点赞中..."), app_name,Red.paint(like_count.to_string()));
+                print!("\r[{}] [{}] ({}): 已点赞{}个", Purple.paint(now.to_string()), Blue.paint("点赞中..."), app_name,Red.paint(like_count.to_string()));
                 continue
             }
         }
