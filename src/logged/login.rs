@@ -163,7 +163,7 @@ impl Login {
                         Statue::Expired => {
                             warn!("{}", scan_info.data.message);
                             info!("请重新扫描二维码");
-                            Box::pin(Login::qrcode()).await; // 对递归调用进行盒装箱
+                            Box::pin(Self::qrcode()).await; // 对递归调用进行盒装箱
                         }
                         Statue::NotConfirmed => {
                             if is_confirmed_first {
