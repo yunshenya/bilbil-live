@@ -1,16 +1,16 @@
-use std::io::{stdout, Write};
 use crate::plugin::comment::Comment;
 use crate::plugin::like::LikeSend;
 use crate::plugin::video::FlashVideoWatch;
 use crate::util::error::BilCoreResult;
+use ansi_term::Color::{Blue, Purple};
+use ansi_term::Colour::Red;
+use ansi_term::{Colour, Style};
+use chrono::Local;
 use log::{info, warn};
+use std::io::{stdout, Write};
 use std::sync::Arc;
 use std::time::Duration;
-use ansi_term::Color::{Blue, Purple};
-use ansi_term::{Colour, Style};
-use ansi_term::Colour::Red;
-use chrono::Local;
-use tokio::time::{sleep, interval};
+use tokio::time::{interval, sleep};
 use tokio::{self, join, task};
 
 pub struct Task;
@@ -40,8 +40,14 @@ impl Task {
                 let app_name = Style::new().fg(pink).paint("bilbil-live");
                 like_count += 1;
                 stdout().flush().unwrap();
-                print!("\r[{}] [{}] ({}): 已点赞{}个", Purple.paint(now.to_string()), Blue.paint("点赞中..."), app_name,Red.paint(like_count.to_string()));
-                continue
+                print!(
+                    "\r[{}] [{}] ({}): 已点赞{}个",
+                    Purple.paint(now.to_string()),
+                    Blue.paint("点赞中..."),
+                    app_name,
+                    Red.paint(like_count.to_string())
+                );
+                continue;
             }
         }
     }
@@ -57,7 +63,10 @@ impl Task {
 
                 loop {
                     let message = iter.next().unwrap();
-                    let form = comment.build_form(Some(message.to_string())).await.unwrap_or_default();
+                    let form = comment
+                        .build_form(Some(message.to_string()))
+                        .await
+                        .unwrap_or_default();
                     comment.send(form).await.unwrap_or_default();
                     info!("消息 '{}' 发送成功了( •̀ ω •́ )y", message);
                     sleep(Duration::from_secs(600)).await; // 10分钟转换为秒
