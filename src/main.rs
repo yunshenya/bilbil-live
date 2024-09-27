@@ -38,7 +38,7 @@ async fn main() -> BilCoreResult<()> {
         Red.paint(options.len().to_string())
     );
     stdout().flush()?; // 确保提示信息被立即打印
-                       // 读取用户输入
+    // 读取用户输入
     stdin().read_line(&mut input).expect("Failed to read line");
 
     // 处理用户输入
