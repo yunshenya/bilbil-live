@@ -106,7 +106,7 @@ impl FlashVideoWatch {
             .last()
             .unwrap();
         let output = Command::new("node")
-            .args(["./app.js", imgkey, subkey])
+            .args(["./assets/app.js", imgkey, subkey])
             .output();
         match output {
             Ok(rep) => {
