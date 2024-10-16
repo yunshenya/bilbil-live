@@ -40,7 +40,7 @@ impl CookiesConfig {
             }
         }
         // 如果找不到bili_jct，则返回一个空字符串，这里使用了Cow的Owned变体
-        Cow::Owned(String::new())
+        "".into()
     }
 
     pub async fn anchor_id(room_id: u128) -> BilCoreResult<RoomInfo> {

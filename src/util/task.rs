@@ -92,7 +92,7 @@ impl Task {
         Ok(())
     }
 
-    pub async fn run_video(bvid: &str) -> FlashVideoWatch {
-        FlashVideoWatch::new(bvid).await
+    pub async fn run_video(bvid: &str) -> BilCoreResult<FlashVideoWatch> {
+        Ok(FlashVideoWatch::new(bvid).await)
     }
 }

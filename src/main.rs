@@ -20,7 +20,7 @@ async fn main() -> BilCoreResult<()> {
     live_add().await;
     do_sign().await;
     println!("{}", Green.paint("请选择想要实现的功能"));
-    let options = ["直播间刷赞", "直播间刷弹幕"];
+    let options = ["直播间刷赞", "直播间刷弹幕", "视频刷赞"];
     for (index, options) in options.iter().enumerate() {
         println!(
             "{}: {} {}",
@@ -32,9 +32,9 @@ async fn main() -> BilCoreResult<()> {
     let mut input = String::new();
     print!(
         "{} ({}{}{}): ",
-        Green.paint("Enter your choice"),
+        Green.paint("输入您的选择"),
         Red.paint("1"),
-        Blue.paint("-1"),
+        Blue.paint("-"),
         Red.paint(options.len().to_string())
     );
     stdout().flush()?; // 确保提示信息被立即打印
@@ -44,13 +44,20 @@ async fn main() -> BilCoreResult<()> {
     // 处理用户输入
     match input.trim().parse::<usize>() {
         Ok(choice) if choice >= 1 && choice <= options.len() => {
-            println!("You selected: {}", options[choice - 1]);
+            println!("{} {}", Green.paint("您选择了:") ,Red.paint(options[choice - 1]));
             match choice {
                 1 => {
                     Task::run().await;
                 }
                 2 => {
                     Task::run_live().await?;
+                }
+                3 => {
+                    print!("{}", Green.paint("请输入视频bvid: "));
+                    stdout().flush()?;
+                    let mut bvid = String::new();
+                    stdin().read_line(&mut bvid)?;
+                    Task::run_video(bvid.as_str()).await?;
                 }
                 _ => {
                     error!("索引错误");

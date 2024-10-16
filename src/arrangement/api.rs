@@ -24,13 +24,14 @@ impl PathInfo for Config {
 #[api(endpoint("https://api.live.bilibili.com/xlive/web-ucenter/v1/sign/DoSign"))]
 pub struct DoSign;
 
-#[derive(Api)]
-#[api(endpoint("https://api.bilibili.com/x/web-interface/nav"))]
-pub struct Nav;
+// #[derive(Api)]
+// #[api(endpoint("https://api.bilibili.com/x/web-interface/nav"))]
+// pub struct Nav;
 
-#[derive(Api)]
-#[api(endpoint("https://api.bilibili.com/x/web-interface/view/conclusion/judge"))]
-pub struct Judge;
+// #[derive(Api)]
+// #[api(endpoint("https://api.bilibili.com/x/web-interface/view/conclusion/judge"))]
+// pub struct Judge;
+
 #[derive(Api)]
 #[api(endpoint("https://passport.bilibili.com/x/passport-login/web/qrcode/generate"))]
 pub struct GetCodeUrl;
