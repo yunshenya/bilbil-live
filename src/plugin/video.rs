@@ -8,7 +8,7 @@ use crate::util::utils::Utils;
 struct VideoJson {
     code: i32,
     message: String,
-    ttl: u8
+    ttl: u8,
 }
 
 // #[derive(Deserialize)]
@@ -74,9 +74,7 @@ impl FlashVideoWatch {
                 println!("{}", video.message);
                 Ok(())
             }
-            Err(err) => {
-                Err(err.into())
-            }
+            Err(err) => Err(err),
         }
         // let video_json =
         //     serde_json::from_str::<VideoJson>(&response.text().await.unwrap()).unwrap();

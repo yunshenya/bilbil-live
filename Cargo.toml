@@ -34,4 +34,4 @@ qrcode = "0.14.0"
 md5 = "0.7.0"
 
 [profile.release]
-opt-level = 3
+opt-level = 2

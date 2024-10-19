@@ -38,13 +38,17 @@ async fn main() -> BilCoreResult<()> {
         Red.paint(options.len().to_string())
     );
     stdout().flush()?; // 确保提示信息被立即打印
-    // 读取用户输入
+                       // 读取用户输入
     stdin().read_line(&mut input).expect("Failed to read line");
 
     // 处理用户输入
     match input.trim().parse::<usize>() {
         Ok(choice) if choice >= 1 && choice <= options.len() => {
-            println!("{} {}", Green.paint("您选择了:") ,Red.paint(options[choice - 1]));
+            println!(
+                "{} {}",
+                Green.paint("您选择了:"),
+                Red.paint(options[choice - 1])
+            );
             match choice {
                 1 => {
                     Task::run().await;
