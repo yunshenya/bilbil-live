@@ -25,7 +25,7 @@ pub enum Statue {
 
 #[derive(Serialize, Deserialize)]
 struct CodeResultData {
-    code: u32,
+    code: i32,
     message: String,
     //并不是真正意义上的url
     url: String,
@@ -119,7 +119,7 @@ impl Login {
                         is_scan.text().await.unwrap(),
                     );
                     let scan_info = serde_json::from_str::<CodeResult>(&text).unwrap();
-                    match (scan_info.data.code as i32).into() {
+                    match scan_info.data.code.into() {
                         Statue::Success => {
                             info!("{}", "登录成功");
                             let resp = client
