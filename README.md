@@ -10,3 +10,8 @@
 bilbil-live.exe
 ```
 回车即可
+## 效果图
+![功能选择效果图](image/login.png)
+
+---
+![登录效果图](image/qrcode.png)
