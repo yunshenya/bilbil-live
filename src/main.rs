@@ -57,11 +57,17 @@ async fn main() -> BilCoreResult<()> {
                     Task::run_live().await?;
                 }
                 3 => {
-                    print!("{}", Green.paint("请输入视频bvid: "));
-                    stdout().flush()?;
-                    let mut bvid = String::new();
-                    stdin().read_line(&mut bvid)?;
-                    Task::run_video(bvid.as_str()).await?;
+                    loop {
+                        print!("{}", Green.paint("请输入视频bvid: "));
+                        stdout().flush()?;
+                        let mut bvid_str = String::new();
+                        stdin().read_line(&mut bvid_str)?;
+                        let bvid = bvid_str.trim();
+                        if bvid.starts_with("BV") && bvid.len() == 12 {
+                            Task::run_video(&bvid).await?;
+                            break
+                        }
+                    }
                 }
                 _ => {
                     error!("索引错误");
