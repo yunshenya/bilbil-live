@@ -20,7 +20,7 @@ pub enum Statue {
     Expired,
     NotConfirmed,
     NotScanned,
-    Unknown
+    Unknown,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -29,30 +29,30 @@ struct CodeResultData {
     message: String,
     //并不是真正意义上的url
     url: String,
-    refresh_token: String
+    refresh_token: String,
 }
 
 #[derive(Deserialize, Serialize)]
 struct CodeResult {
-    data: CodeResultData
+    data: CodeResultData,
 }
 
 #[derive(Serialize, Deserialize)]
 struct QrData {
     url: String,
-    qrcode_key: String
+    qrcode_key: String,
 }
 
 #[derive(Deserialize, Serialize)]
 struct AccountData {
     mid: u128,
     uname: String,
-    sign: String
+    sign: String,
 }
 
 #[derive(Serialize, Deserialize)]
 struct Account {
-    data: AccountData
+    data: AccountData,
 }
 #[derive(Serialize, Deserialize)]
 struct Qrcode {
@@ -65,7 +65,7 @@ impl From<i32> for Statue {
             86038 => Statue::Expired,
             86090 => Statue::NotConfirmed,
             86101 => Statue::NotScanned,
-            _ => Statue::Unknown
+            _ => Statue::Unknown,
         }
     }
 }

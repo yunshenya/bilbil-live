@@ -17,7 +17,11 @@ impl Utils {
         let mut headers = HeaderMap::new();
         headers.insert(USER_AGENT, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36".parse().unwrap());
         headers.insert(COOKIE, load_cookies.cookies.parse().unwrap());
-        let client = Client::builder().default_headers(headers).cookie_store(true).build().unwrap();
+        let client = Client::builder()
+            .default_headers(headers)
+            .cookie_store(true)
+            .build()
+            .unwrap();
         Self {
             url: url.to_string(),
             client,

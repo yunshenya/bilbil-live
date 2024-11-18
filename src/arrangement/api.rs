@@ -65,3 +65,7 @@ pub struct Add;
 #[derive(Api)]
 #[api(endpoint("https://api.bilibili.com/x/web-interface/view"))]
 pub struct VideoInfo;
+
+#[derive(Api)]
+#[api(endpoint("https://api.bilibili.com/x/player/online/total"))]
+pub struct OnlineTotal;
